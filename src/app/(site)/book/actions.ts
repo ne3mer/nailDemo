@@ -23,9 +23,6 @@ export type PublicBookingInput = {
   notes?: string | null;
 };
 
-// Realistic mock slots for interactive demo preview when database is unconfigured
-const DEMO_PREVIEW_SLOTS = ["10:00", "11:30", "14:00", "15:30", "17:00", "18:30"];
-
 export async function fetchAvailableSlotsAction(
   barberId: string,
   serviceId: string,
@@ -40,19 +37,8 @@ export async function fetchAvailableSlotsAction(
     return { slots: [], error: "Studio not found." };
   }
 
-  // Demo fallback when Supabase is not configured
   if (!isSupabaseConfigured()) {
-    const slots: AvailableSlot[] = DEMO_PREVIEW_SLOTS.map((timeStr) => {
-      const startUtc = budapestDateTimeToUtc(dateStr, timeStr);
-      const endUtc = new Date(startUtc.getTime() + 75 * 60 * 1000);
-      return {
-        timeStr,
-        formattedTime: timeStr,
-        startUtc: startUtc.toISOString(),
-        endUtc: endUtc.toISOString(),
-      };
-    });
-    return { slots };
+    return { slots: [], error: "Database not configured." };
   }
 
   try {
@@ -82,17 +68,8 @@ export async function fetchAvailableDatesAction(
     return { dates: [], error: "Studio not found." };
   }
 
-  // Demo fallback when Supabase is not configured: next 30 days excluding Sundays
   if (!isSupabaseConfigured()) {
-    const dates: string[] = [];
-    const today = new Date();
-    for (let i = 1; i <= 30; i++) {
-      const d = new Date(today.getTime() + i * 24 * 60 * 60 * 1000);
-      if (d.getDay() !== 0) { // Exclude Sunday
-        dates.push(d.toISOString().slice(0, 10));
-      }
-    }
-    return { dates };
+    return { dates: [], error: "Database not configured." };
   }
 
   try {
