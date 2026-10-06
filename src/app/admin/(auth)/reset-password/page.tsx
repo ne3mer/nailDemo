@@ -2,7 +2,7 @@ import { APP_NAME } from "@/config/app";
 import { ResetPasswordForm } from "@/components/admin/reset-password-form";
 
 export const metadata = {
-  title: "Set Barber Password | Barbod Admin",
+  title: "Set Barber Password | Maison Rose Admin",
 };
 
 export default function AdminResetPasswordPage() {

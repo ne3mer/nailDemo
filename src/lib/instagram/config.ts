@@ -17,7 +17,7 @@ export function getInstagramRedirectUri(): string {
     return `${baseUrl}/api/auth/instagram/callback`;
   }
   if (process.env.NODE_ENV === "production") {
-    return "https://barbod-gold.vercel.app/api/auth/instagram/callback";
+    return "https://maison-rose.demo/api/auth/instagram/callback";
   }
   return "http://localhost:3000/api/auth/instagram/callback";
 }

@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { BlockedTimesManager } from "@/components/admin/blocked-times-manager";
 
 export const metadata = {
-  title: "Blocked Times | Barbod Admin",
+  title: "Blocked Times | Maison Rose Admin",
 };
 
 export default async function AdminBlockedTimesPage() {

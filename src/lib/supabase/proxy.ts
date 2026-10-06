@@ -1,7 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-import { getSupabaseAnonKey, getSupabaseUrl } from "@/lib/env";
+import { getSupabaseAnonKey, getSupabaseUrl, isSupabaseConfigured } from "@/lib/env";
 
 /**
  * Refresh the auth session and gate /admin routes.
@@ -9,6 +9,27 @@ import { getSupabaseAnonKey, getSupabaseUrl } from "@/lib/env";
  */
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request });
+
+  const pathname = request.nextUrl.pathname;
+  const isAdminRoute = pathname === "/admin" || pathname.startsWith("/admin/");
+  const isAuthRoute =
+    pathname === "/admin/login" ||
+    pathname.startsWith("/admin/login/") ||
+    pathname === "/admin/reset-password" ||
+    pathname.startsWith("/admin/reset-password/");
+
+  // Demo fail-closed guard: if Supabase credentials are not configured,
+  // do not throw an unhandled exception or contact database. Allow public site to load,
+  // and route unauthenticated admin visits safely to the login page.
+  if (!isSupabaseConfigured()) {
+    if (isAdminRoute && !isAuthRoute) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/admin/login";
+      url.search = "";
+      return NextResponse.redirect(url);
+    }
+    return supabaseResponse;
+  }
 
   const supabase = createServerClient(getSupabaseUrl(), getSupabaseAnonKey(), {
     cookies: {
@@ -33,14 +54,6 @@ export async function updateSession(request: NextRequest) {
   // Do not insert logic between createServerClient and getClaims().
   const { data } = await supabase.auth.getClaims();
   const user = data?.claims;
-
-  const pathname = request.nextUrl.pathname;
-  const isAdminRoute = pathname === "/admin" || pathname.startsWith("/admin/");
-  const isAuthRoute =
-    pathname === "/admin/login" ||
-    pathname.startsWith("/admin/login/") ||
-    pathname === "/admin/reset-password" ||
-    pathname.startsWith("/admin/reset-password/");
 
   if (isAdminRoute) {
     if (!user && !isAuthRoute) {

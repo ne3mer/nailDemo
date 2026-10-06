@@ -1,3 +1,4 @@
+import type { PortfolioCategory } from "@/types";
 import { createAdminClient } from "../src/lib/supabase/admin";
 import {
   DEMO_BUSINESS,
@@ -276,7 +277,7 @@ async function seed() {
         barber_id: assignedBarberId,
         title_en: item.titleEn,
         title_hu: item.titleHu,
-        category: item.category,
+        category: (item.category as unknown as PortfolioCategory),
         image_path: item.imageUrl, // Stores full URL or path
         is_visible: true,
         sort_order: DEMO_PORTFOLIO.indexOf(item),
@@ -287,7 +288,7 @@ async function seed() {
         .update({
           barber_id: assignedBarberId,
           title_hu: item.titleHu,
-          category: item.category,
+          category: (item.category as unknown as PortfolioCategory),
           image_path: item.imageUrl,
           is_visible: true,
           sort_order: DEMO_PORTFOLIO.indexOf(item),

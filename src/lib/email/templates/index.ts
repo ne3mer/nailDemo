@@ -47,7 +47,7 @@ function emailLayout(title: string, bodyContent: string): string {
           <tr>
             <td style="background-color: #09090b; padding: 24px 32px; text-align: center; border-top: 1px solid #27272a;">
               <p style="margin: 0; font-size: 12px; color: #71717a; line-height: 1.5;">
-                &copy; ${new Date().getFullYear()} Barbod Barber Studio. All rights reserved.
+                &copy; ${new Date().getFullYear()} Maison Rose Studio. All rights reserved.
               </p>
               <p style="margin: 4px 0 0 0; font-size: 11px; color: #52525b;">
                 Budapest, Hungary &bull; Europe/Budapest

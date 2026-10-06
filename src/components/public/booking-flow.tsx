@@ -281,7 +281,9 @@ export function BookingFlow({
     setSubmitting(false);
 
     if (res.error) {
-      if (res.errorCode === "SLOT_UNAVAILABLE") {
+      if (res.errorCode === "DEMO_MODE") {
+        setErrorMsg(res.error);
+      } else if (res.errorCode === "SLOT_UNAVAILABLE") {
         setErrorMsg(t.errorConflict);
       } else if (res.errorCode === "REQUIRED_FIELDS") {
         setErrorMsg(t.errorRequiredFields);

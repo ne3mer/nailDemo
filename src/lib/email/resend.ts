@@ -19,7 +19,7 @@ export function getResendClient(): Resend | null {
 }
 
 export function getEmailFromAddress(): string {
-  return process.env.EMAIL_FROM || 'Barbod Barber <onboarding@resend.dev>';
+  return process.env.EMAIL_FROM || 'Maison Rose <onboarding@resend.dev>';
 }
 
 export function getEmailReplyToAddress(): string | undefined {

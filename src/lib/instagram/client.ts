@@ -5,64 +5,62 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { decryptToken } from "./crypto";
 import type { InstagramFeedResponse, InstagramMediaItem, InstagramConnectionStatus } from "./types";
 
-// Curated high-res editorial Barbod Atelier fallback items
+// Curated high-res editorial Maison Rose Studio fallback items
 const FALLBACK_ATELIER_POSTS: InstagramMediaItem[] = [
   {
     id: "atelier-post-1",
-    caption: "Precision skin fade & classic beard sculpture at Barbod Barber Atelier, Budapest. #barbodbarberhu #budapestbarber #precisioncut",
+    caption: "Glazed rose & pearl chrome dust. Meticulous Russian e-file prep at Maison Rose, Budapest. #maisonrose #russianmanicure #editorialnails",
     media_type: "IMAGE",
-    media_url: "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?q=80&w=1200&auto=format&fit=crop",
-    permalink: "https://www.instagram.com/barbod.barber.hu",
+    media_url: "https://images.unsplash.com/photo-1632345031435-8727f6897d53?q=80&w=1200&auto=format&fit=crop",
+    permalink: "https://www.instagram.com/maisonrose.budapest",
     timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24 * 1).toISOString(),
-    username: "barbod.barber.hu",
+    username: "maisonrose.budapest",
     is_pinned: true,
   },
   {
     id: "atelier-post-2",
-    caption: "The art of hot towel beard treatment. Pure luxury grooming in the heart of Budapest.",
-    media_type: "VIDEO",
-    media_url: "https://images.unsplash.com/photo-1621605815971-fbc98d665033?q=80&w=900&auto=format&fit=crop",
-    thumbnail_url: "https://images.unsplash.com/photo-1621605815971-fbc98d665033?q=80&w=900&auto=format&fit=crop",
-    permalink: "https://www.instagram.com/barbod.barber.hu",
+    caption: "Architectural micro French tips on BIAB natural strengthening base. #biab #naturalnails #budapestnails",
+    media_type: "IMAGE",
+    media_url: "https://images.unsplash.com/photo-1604654894610-df63bc536371?q=80&w=900&auto=format&fit=crop",
+    permalink: "https://www.instagram.com/maisonrose.budapest",
     timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24 * 3).toISOString(),
-    username: "barbod.barber.hu",
-    is_reel: true,
+    username: "maisonrose.budapest",
   },
   {
     id: "atelier-post-3",
-    caption: "Tailored scissor work for modern elegance. Details matter.",
+    caption: "Cashmere rose nude overlay with high gloss finish. Clean aesthetics on Andrássy út.",
     media_type: "IMAGE",
-    media_url: "https://images.unsplash.com/photo-1585747860715-2ba37e788b70?q=80&w=900&auto=format&fit=crop",
-    permalink: "https://www.instagram.com/barbod.barber.hu",
+    media_url: "https://images.unsplash.com/photo-1519014816548-bf5fe059798b?q=80&w=900&auto=format&fit=crop",
+    permalink: "https://www.instagram.com/maisonrose.budapest",
     timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24 * 5).toISOString(),
-    username: "barbod.barber.hu",
+    username: "maisonrose.budapest",
   },
   {
     id: "atelier-post-4",
-    caption: "Behind the scenes at the atelier. Precision tools for precision craftsmanship.",
-    media_type: "CAROUSEL_ALBUM",
-    media_url: "https://images.unsplash.com/photo-1599351431202-1e0f0137899a?q=80&w=900&auto=format&fit=crop",
-    permalink: "https://www.instagram.com/barbod.barber.hu",
+    caption: "Soft Gel-X almond extensions in sheer petal blush. Flawless symmetry.",
+    media_type: "IMAGE",
+    media_url: "https://images.unsplash.com/photo-1607779097040-26e80aa78e66?q=80&w=900&auto=format&fit=crop",
+    permalink: "https://www.instagram.com/maisonrose.budapest",
     timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7).toISOString(),
-    username: "barbod.barber.hu",
+    username: "maisonrose.budapest",
   },
   {
     id: "atelier-post-5",
-    caption: "Classic taper fade styled with matte finish pomade. Barbod Signature Cut.",
+    caption: "Studio sanctuary details and hand-painted 24k gold leaf accents. #maisonrosebudapest",
     media_type: "IMAGE",
-    media_url: "https://images.unsplash.com/photo-1622286342621-4bd786c2447c?q=80&w=900&auto=format&fit=crop",
-    permalink: "https://www.instagram.com/barbod.barber.hu",
+    media_url: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=900&auto=format&fit=crop",
+    permalink: "https://www.instagram.com/maisonrose.budapest",
     timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24 * 10).toISOString(),
-    username: "barbod.barber.hu",
+    username: "maisonrose.budapest",
   },
   {
     id: "atelier-post-6",
-    caption: "Atmosphere & architectural details of our Budapest grooming studio.",
+    caption: "Warm rosewater soak & botanical oil massage at our beauty sanctuary. A moment for you.",
     media_type: "IMAGE",
-    media_url: "https://images.unsplash.com/photo-1512690459411-b9245aed614b?q=80&w=900&auto=format&fit=crop",
-    permalink: "https://www.instagram.com/barbod.barber.hu",
+    media_url: "https://images.unsplash.com/photo-1519415510236-718bdfcd89c8?q=80&w=900&auto=format&fit=crop",
+    permalink: "https://www.instagram.com/maisonrose.budapest",
     timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24 * 14).toISOString(),
-    username: "barbod.barber.hu",
+    username: "maisonrose.budapest",
   },
 ];
 
@@ -94,7 +92,7 @@ function parseRecord(record: {
 
     return {
       accessToken: rawToken,
-      username: record.username || "barbod.barber.hu",
+      username: record.username || "maisonrose.budapest",
       instagramUserId: record.instagram_user_id || "",
       connectedAt: record.connected_at || new Date().toISOString(),
       expiresAt: record.token_expires_at || undefined,
@@ -222,16 +220,16 @@ export async function fetchInstagramFeed(forceRefresh = false, businessId?: stri
       const mediaType = typeof item.media_type === "string" ? (item.media_type as "IMAGE" | "VIDEO" | "CAROUSEL_ALBUM") : "IMAGE";
       const mediaUrl = typeof item.media_url === "string" ? item.media_url : "";
       const thumbnailUrl = typeof item.thumbnail_url === "string" ? item.thumbnail_url : undefined;
-      const permalink = typeof item.permalink === "string" ? item.permalink : "https://www.instagram.com/barbod.barber.hu";
+      const permalink = typeof item.permalink === "string" ? item.permalink : "https://www.instagram.com/maisonrose.budapest";
       const timestamp = typeof item.timestamp === "string" ? item.timestamp : new Date().toISOString();
-      const username = typeof item.username === "string" ? item.username : dbConnection?.username || "barbod.barber.hu";
+      const username = typeof item.username === "string" ? item.username : dbConnection?.username || "maisonrose.budapest";
 
       const isVideo = mediaType === "VIDEO";
       const isReel = isVideo && (captionStr.toLowerCase().includes("reel") || captionStr.toLowerCase().includes("#reel"));
 
       return {
         id: String(item.id ?? Math.random()),
-        caption: captionStr || "Barbod Barber Atelier",
+        caption: captionStr || "Maison Rose Studio",
         media_type: mediaType,
         media_url: isVideo ? thumbnailUrl || mediaUrl : mediaUrl,
         thumbnail_url: thumbnailUrl,
@@ -254,7 +252,7 @@ export async function fetchInstagramFeed(forceRefresh = false, businessId?: stri
             expiresAt: dbConnection.expiresAt,
           }
         : {
-            username: formattedData[0]?.username || "barbod.barber.hu",
+            username: formattedData[0]?.username || "maisonrose.budapest",
             instagramUserId: "env_configured",
             connectedAt: new Date().toISOString(),
           },

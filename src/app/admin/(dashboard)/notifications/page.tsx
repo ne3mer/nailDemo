@@ -4,7 +4,7 @@ import { NotificationsManager } from "@/components/admin/notifications-manager";
 import { redirect } from "next/navigation";
 
 export const metadata = {
-  title: "Email Logs | Barbod Barber Admin",
+  title: "Email Logs | Maison Rose Admin",
 };
 
 export default async function NotificationsPage() {

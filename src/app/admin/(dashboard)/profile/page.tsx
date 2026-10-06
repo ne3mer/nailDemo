@@ -3,7 +3,7 @@ import { requireAdminContext } from "@/lib/auth/session";
 import { StaffProfileManager } from "@/components/admin/staff-profile-manager";
 
 export const metadata = {
-  title: "My Profile | Barbod Staff",
+  title: "My Profile | Maison Rose Staff",
 };
 
 export default async function StaffProfilePage() {

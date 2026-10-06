@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import {
   getPublicBusiness,
   getPublicServices,
@@ -6,6 +7,8 @@ import {
 } from "@/lib/public/business";
 import { BookingFlow } from "@/components/public/booking-flow";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   title: "Book Appointment | Maison Rose — Nail & Beauty Studio Budapest",
   description:
@@ -13,7 +16,7 @@ export const metadata = {
 };
 
 export default async function PublicBookingPage() {
-  const business = await getPublicBusiness("barbod-barber");
+  const business = await getPublicBusiness("maison-rose");
 
   if (!business) {
     return (
@@ -33,11 +36,20 @@ export default async function PublicBookingPage() {
   ]);
 
   return (
-    <BookingFlow
-      business={business}
-      barbers={barbers}
-      services={services}
-      barberServicesMap={barberServicesMap}
-    />
+    <Suspense
+      fallback={
+        <div className="mx-auto max-w-3xl py-24 text-center">
+          <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent mx-auto mb-4" />
+          <p className="text-sm text-muted-foreground">Loading appointment schedule…</p>
+        </div>
+      }
+    >
+      <BookingFlow
+        business={business}
+        barbers={barbers}
+        services={services}
+        barberServicesMap={barberServicesMap}
+      />
+    </Suspense>
   );
 }

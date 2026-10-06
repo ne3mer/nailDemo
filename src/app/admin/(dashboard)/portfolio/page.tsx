@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { PortfolioManager } from "@/components/admin/portfolio-manager";
 
 export const metadata = {
-  title: "Portfolio | Barbod Admin",
+  title: "Portfolio | Maison Rose Admin",
 };
 
 export default async function AdminPortfolioPage({

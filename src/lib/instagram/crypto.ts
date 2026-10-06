@@ -7,8 +7,8 @@ function getEncryptionKey(): Buffer {
   const secret =
     process.env.INSTAGRAM_ENCRYPTION_SECRET ||
     process.env.SUPABASE_SERVICE_ROLE_KEY ||
-    "barbod_default_server_encryption_secret_key_32";
-  return crypto.scryptSync(secret, "barbod_instagram_salt", 32);
+    "maison_rose_server_encryption_secret_key_32";
+  return crypto.scryptSync(secret, "maison_rose_instagram_salt", 32);
 }
 
 /**

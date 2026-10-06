@@ -160,7 +160,7 @@ export function SettingsEditor({ business }: { business: AdminBusiness }) {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="contact@barbodbarber.hu"
+                placeholder="bonjour@maisonrose-studio.hu"
               />
             </div>
           </div>
@@ -189,7 +189,7 @@ export function SettingsEditor({ business }: { business: AdminBusiness }) {
                 id="b_instagram"
                 value={instagramUrl}
                 onChange={(e) => setInstagramUrl(e.target.value)}
-                placeholder="https://instagram.com/barbod.barber.hu"
+                placeholder="https://instagram.com/maisonrose.budapest"
               />
             </div>
             <div className="space-y-1.5">

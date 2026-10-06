@@ -201,7 +201,7 @@ export function StaffProfileManager({ barber }: StaffProfileManagerProps) {
           <CardHeader>
             <CardTitle className="text-base font-serif">Public Details & Bios</CardTitle>
             <CardDescription className="text-xs">
-              These details appear on the Barbod homepage and public booking team selection.
+              These details appear on the Maison Rose homepage and public booking team selection.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-5 text-sm">

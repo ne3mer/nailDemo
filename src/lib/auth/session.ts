@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import type { User } from "@supabase/supabase-js";
 
 import { createClient } from "@/lib/supabase/server";
+import { isSupabaseConfigured } from "@/lib/env";
 import type { Tables } from "@/types/database";
 
 export type AdminBusiness = Tables<"businesses">;
@@ -16,14 +17,22 @@ export type AdminContext = {
 };
 
 export async function getAuthUser() {
-  const supabase = await createClient();
-  const { data, error } = await supabase.auth.getUser();
-
-  if (error || !data.user) {
+  if (!isSupabaseConfigured()) {
     return null;
   }
 
-  return data.user;
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase.auth.getUser();
+
+    if (error || !data.user) {
+      return null;
+    }
+
+    return data.user;
+  } catch {
+    return null;
+  }
 }
 
 /** Require an authenticated user for admin pages. Proxy should already redirect. */
@@ -42,22 +51,30 @@ export async function requireAuthUser() {
 export async function getOwnedBusiness(
   ownerId: string,
 ): Promise<AdminBusiness | null> {
-  const supabase = await createClient();
-
-  const { data, error } = await supabase
-    .from("businesses")
-    .select("*")
-    .eq("owner_id", ownerId)
-    .order("created_at", { ascending: true })
-    .limit(1)
-    .maybeSingle();
-
-  if (error) {
-    console.error("Failed to load owned business", error.message);
+  if (!isSupabaseConfigured()) {
     return null;
   }
 
-  return data;
+  try {
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+      .from("businesses")
+      .select("*")
+      .eq("owner_id", ownerId)
+      .order("created_at", { ascending: true })
+      .limit(1)
+      .maybeSingle();
+
+    if (error) {
+      console.error("Failed to load owned business", error.message);
+      return null;
+    }
+
+    return data;
+  } catch {
+    return null;
+  }
 }
 
 /**
@@ -67,59 +84,63 @@ export async function getAdminContext(): Promise<AdminContext | null> {
   const user = await getAuthUser();
   if (!user) return null;
 
-  const supabase = await createClient();
+  try {
+    const supabase = await createClient();
 
-  // 1. Check if user is business owner
-  const { data: business } = await supabase
-    .from("businesses")
-    .select("*")
-    .eq("owner_id", user.id)
-    .order("created_at", { ascending: true })
-    .limit(1)
-    .maybeSingle();
-
-  if (business) {
-    const { data: ownerBarber } = await supabase
-      .from("barbers")
-      .select("*")
-      .eq("business_id", business.id)
-      .eq("user_id", user.id)
-      .maybeSingle();
-
-    return {
-      user,
-      business,
-      role: "owner",
-      barber: ownerBarber ?? null,
-    };
-  }
-
-  // 2. Check if user is an active staff barber
-  const { data: staffBarber } = await supabase
-    .from("barbers")
-    .select("*")
-    .eq("user_id", user.id)
-    .eq("is_active", true)
-    .maybeSingle();
-
-  if (staffBarber) {
-    const { data: staffBusiness } = await supabase
+    // 1. Check if user is business owner
+    const { data: business } = await supabase
       .from("businesses")
       .select("*")
-      .eq("id", staffBarber.business_id)
-      .single();
+      .eq("owner_id", user.id)
+      .order("created_at", { ascending: true })
+      .limit(1)
+      .maybeSingle();
 
-    if (staffBusiness) {
+    if (business) {
+      const { data: ownerBarber } = await supabase
+        .from("barbers")
+        .select("*")
+        .eq("business_id", business.id)
+        .eq("user_id", user.id)
+        .maybeSingle();
+
       return {
         user,
-        business: staffBusiness,
-        role: "staff",
-        barber: staffBarber,
+        business,
+        role: "owner",
+        barber: ownerBarber ?? null,
       };
     }
-  }
 
-  return null;
+    // 2. Check if user is an active staff barber
+    const { data: staffBarber } = await supabase
+      .from("barbers")
+      .select("*")
+      .eq("user_id", user.id)
+      .eq("is_active", true)
+      .maybeSingle();
+
+    if (staffBarber) {
+      const { data: staffBusiness } = await supabase
+        .from("businesses")
+        .select("*")
+        .eq("id", staffBarber.business_id)
+        .single();
+
+      if (staffBusiness) {
+        return {
+          user,
+          business: staffBusiness,
+          role: "staff",
+          barber: staffBarber,
+        };
+      }
+    }
+
+    return null;
+  } catch {
+    return null;
+  }
 }
 
 /**
@@ -132,4 +153,3 @@ export async function requireAdminContext(): Promise<AdminContext> {
   }
   return context;
 }
-

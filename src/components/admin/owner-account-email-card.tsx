@@ -95,7 +95,7 @@ export function OwnerAccountEmailCard({ currentEmail }: OwnerAccountEmailCardPro
             autoComplete="email"
             value={newEmail}
             onChange={(e) => setNewEmail(e.target.value)}
-            placeholder="owner@barbodbarber.hu"
+            placeholder="owner@maisonrose-studio.hu"
             disabled={saving}
             required
           />

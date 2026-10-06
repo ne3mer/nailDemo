@@ -1,9 +1,7 @@
 /**
- * Centralized Demo Content & Configuration for Barbod Barber Atelier.
+ * Centralized Demo Content & Configuration for Maison Rose — Nail & Beauty Studio.
  * 
- * All temporary/demo text, images, pricing, services, barbers, reviews,
- * and atelier details are centralized here so the owner can easily update
- * or replace them in one place.
+ * Fictional luxury beauty demo content used for fallbacks and initial previews.
  */
 
 export interface DemoBarber {
@@ -27,7 +25,7 @@ export interface DemoService {
   nameHu: string;
   descriptionEn: string;
   descriptionHu: string;
-  category: "Haircut" | "Beard" | "Grooming Packages";
+  category: "Manicure & BIAB" | "Nail Art" | "Pedicure & Care" | "Rituals & Care" | "Haircut" | "Beard" | "Grooming Packages";
   durationMinutes: number;
   priceEur: number;
   priceHuf: number;
@@ -38,7 +36,7 @@ export interface DemoPortfolioItem {
   id: string;
   titleEn: string;
   titleHu: string;
-  category: "Haircuts" | "Coloring" | "Styling" | "Other";
+  category: "Nail Art" | "Gel & BIAB" | "Gel-X" | "Spa Pedicure" | "Haircuts" | "Coloring" | "Styling" | "Other";
   styleTagEn: string;
   styleTagHu: string;
   imageUrl: string;
@@ -61,7 +59,7 @@ export interface DemoReview {
 }
 
 export interface DemoWorkingDay {
-  dayOfWeek: number; // 0=Sunday, 1=Monday...
+  dayOfWeek: number;
   dayNameEn: string;
   dayNameHu: string;
   startTime: string;
@@ -70,438 +68,297 @@ export interface DemoWorkingDay {
 }
 
 export const DEMO_BUSINESS = {
-  name: "Barbod Barber Atelier",
-  slug: "barbod-barber",
-  taglineEn: "Luxury Grooming & Bespoke Barbering in Budapest",
-  taglineHu: "Luxus Férfi Ápolás és Egyedi Borbélymesterség Budapesten",
+  name: "Maison Rose — Nail & Beauty Studio",
+  slug: "maison-rose",
+  shortName: "Maison Rose",
+  taglineEn: "Airy Editorial Nail & Beauty Sanctuary in Budapest",
+  taglineHu: "Légies Köröm- és Szépségápolási Műhely Budapesten",
+  heroTitle: "Beautiful nails. A moment for you.",
+  heroTitleHu: "Gyönyörű körmök. Egy pillanat Önnek.",
+  heroSubtitleEn:
+    "An unhurried sanctuary dedicated to Russian e-file manicures, BIAB nail strengthening, and bespoke hand-painted artistry in the heart of Budapest.",
+  heroSubtitleHu:
+    "Nyugodt, légies szentély a gépi orosz manikűr, a BIAB körömerősítés és az egyedi kézzel festett körömdíszítés számára Budapest szívében.",
+  ctaPrimaryEn: "Book an appointment",
+  ctaPrimaryHu: "Időpont foglalása",
+  ctaSecondaryEn: "Explore Treatments",
+  ctaSecondaryHu: "Kezelések megtekintése",
   descriptionEn:
-    "A sanctuary of refined masculine grooming in Budapest's cultural quarter. We unite classical European barbering heritage with contemporary precision cutting, bespoke beard architecture, and restorative grooming rituals.",
+    "An unhurried sanctuary dedicated to Russian e-file manicures, BIAB nail strengthening, and bespoke hand-painted artistry in the heart of Budapest.",
   descriptionHu:
-    "A kifinomult férfi ápolás szentélye Budapest kulturális negyedében. A klasszikus európai borbély hagyományokat ötvözzük a modern precíziós hajvágással, egyedi szakállformázással és prémium rituálékkal.",
-  address: "Paulay Ede utca 16",
-  district: "1061 Budapest, District VI (Terézváros)",
-  country: "Hungary",
-  landmarkEn: "Near Hungarian State Opera & Andrássy Avenue",
-  landmarkHu: "A Magyar Állami Operaház és az Andrássy út közelében",
-  transitEn: "M1 Opera station (2 min walk) · M1/M2/M3 Deák Ferenc tér (6 min walk)",
-  transitHu: "M1 Opera megálló (2 perc séta) · M1/M2/M3 Deák Ferenc tér (6 perc séta)",
-  phone: "+36 1 789 4521",
-  email: "concierge@barbodbarber.hu",
-  instagramUrl: "https://instagram.com/barbod.barber.hu",
-  instagramHandle: "@barbod.barber.hu",
-  googleMapsUrl: "https://maps.google.com/?q=Paulay+Ede+utca+16+Budapest",
-  rating: 4.95,
-  reviewCount: 184,
-  currencyCode: "EUR",
-  secondaryCurrencyCode: "HUF",
-  foundedYear: 2026,
+    "Nyugodt, légies szentély a gépi orosz manikűr, a BIAB körömerősítés és az egyedi kézzel festett körömdíszítés számára Budapest szívében.",
+  address: "Andrássy út 28, 1st Floor",
+  district: "1061 Budapest, District VI",
+  phone: "+36 1 458 9200",
+  email: "bonjour",
+  instagramUrl: "",
+  instagramHandle: "",
+  rating: 4.98,
+  reviewCount: 210,
+  disclaimerEn: "Concept & Demo Identity · Fictional Luxury Showcase",
+  disclaimerHu: "Koncepció & Demó Megjelenés · Fiktív Prémium Bemutató",
 };
 
 export const DEMO_BARBERS: DemoBarber[] = [
   {
-    id: "beddf866-bbd5-405d-a69c-d0689b8ad28f", // Preserves Barbod's existing Supabase ID
-    name: "Barbod",
-    roleEn: "Founder & Master Barber",
-    roleHu: "Alapító & Mesterborbély",
+    id: "e1111111-1111-4111-a111-111111111111",
+    name: "Camille Laurent",
+    roleEn: "Creative Director & Lead Nail Artist",
+    roleHu: "Kreatív Igazgató & Vezető Körömművész",
     bioEn:
-      "Over 12 years of bespoke craft barbering across distinguished European ateliers. Barbod specializes in classical scissor-over-comb architecture, bespoke cranial consultations, and authentic hot towel straight-razor rituals.",
+      "Trained in Paris and Tokyo, Camille specializes in high-precision Russian manicures, delicate hand-painted micro art, and editorial chrome glazes.",
     bioHu:
-      "Több mint 12 év kézműves borbély tapasztalat neves európai szalonokban. Barbod a klasszikus ollós technikák, a személyre szabott fejforma-konzultáció és a hagyományos borotválási rituálék mestere.",
-    specialtiesEn: ["Master Scissor Cut", "Traditional Razor Shave", "Atelier Signature", "Cranial Consultation"],
-    specialtiesHu: ["Mester ollós hajvágás", "Hagyományos borotválás", "Atelier signature rituálé", "Fejforma-tanácsadás"],
-    photoUrl: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=800&q=80",
-    instagramHandle: "@barbod.master",
-    instagramUrl: "https://instagram.com/barbod.barber.hu",
-    displayOrder: 0,
-  },
-  {
-    id: "c8e104f2-95b8-4d32-9cb7-6a184ef33810",
-    name: "Viktor Kovács",
-    roleEn: "Senior Stylist & Fade Specialist",
-    roleHu: "Senior Stylist & Fade Specialista",
-    bioEn:
-      "Trained in London and Budapest, Viktor brings surgical precision to modern skin fades, textured French crops, and contemporary editorial styling tailored to each client's lifestyle.",
-    bioHu:
-      "Londonban és Budapesten képzett fodrász-borbély. Viktor sebészi pontosságot visz a modern skin fade átmenetekbe, texturált formákba és a modern férfi frizurákba.",
-    specialtiesEn: ["Skin Fade", "Textured Crop", "Low & Mid Tapers", "Modern Styling"],
-    specialtiesHu: ["Skin Fade", "Texturált crop", "Taper átmenetek", "Modern styling"],
-    photoUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80",
-    instagramHandle: "@viktor.cuts.bp",
-    instagramUrl: "https://instagram.com/barbod.barber.hu",
+      "Párizsban és Tokióban képzett művész; specialitása a precíziós orosz manikűr, a finom kézzel festett mikrominták és az editorial krómfények.",
+    specialtiesEn: ["Russian E-File", "Editorial Micro Art", "Chrome Glazes"],
+    specialtiesHu: ["Orosz gépi manikűr", "Kézzel festett mikrominták", "Krómfények"],
+    photoUrl:
+      "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80",
+    instagramHandle: "",
+    instagramUrl: "",
     displayOrder: 1,
   },
   {
-    id: "d9f21503-a6c9-4e43-8dc8-7b295ef44921",
-    name: "Attila Nagy",
-    roleEn: "Beard Artisan & Shave Craftsman",
-    roleHu: "Szakállspecialista & Borotvamester",
+    id: "e2222222-2222-4222-a222-222222222222",
+    name: "Éva Molnár",
+    roleEn: "Senior BIAB & Gel Specialist",
+    roleHu: "Senior BIAB & Zselé Specialista",
     bioEn:
-      "A dedicated scholar of traditional facial hair architecture and hot towel conditioning. Attila sculpts razor-sharp beard contours and restorative steam treatments designed for the discerning gentleman.",
+      "Passionate about natural nail architecture and long-term health, Éva crafts flawless structured overlays and architectural French tips.",
     bioHu:
-      "A hagyományos szakáll-architektúra és a gőzölős kondicionálás elhivatott mestere. Attila éles, precíz szakállvonalakat és pihentető forró törölközős kezeléseket készít.",
-    specialtiesEn: ["Beard Sculpting", "Hot Towel Shave", "Beard Fade", "Botanical Conditioning"],
-    specialtiesHu: ["Szakállformázás", "Forró törölközős borotválás", "Szakáll fade", "Növényi olajos kondicionálás"],
-    photoUrl: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=800&q=80",
-    instagramHandle: "@attila.beardcraft",
-    instagramUrl: "https://instagram.com/barbod.barber.hu",
+      "A természetes körmök anatómiájának és épségének szakértője; tökéletes építőzselés megerősítéseket és letisztult francia dizájnokat készít.",
+    specialtiesEn: ["BIAB™ Strengthening", "Architectural French", "Dry Cuticle Care"],
+    specialtiesHu: ["BIAB™ körömerősítés", "Épített francia vég", "Száraz kutikula-ápolás"],
+    photoUrl:
+      "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=80",
+    instagramHandle: "",
+    instagramUrl: "",
     displayOrder: 2,
+  },
+  {
+    id: "e3333333-3333-4333-a333-333333333333",
+    name: "Sophie Varga",
+    roleEn: "Spa Specialist & Nail Care Artisan",
+    roleHu: "Spa Specialista & Körömápoló",
+    bioEn:
+      "Combining reflexology techniques with Japanese organic buffing, Sophie delivers deeply restorative treatments for hands and feet.",
+    bioHu:
+      "Reflexológiai technikákkal és japán organikus méhviaszos kezelésekkel nyújt mélyen relaxáló élményt a kezeknek és lábaknak.",
+    specialtiesEn: ["Japanese Organic Care", "Luxury Pedicure", "Aromatherapy Hand Spa"],
+    specialtiesHu: ["Japán organikus ápolás", "Luxus pedikűr", "Aromaterápiás kézfürdő"],
+    photoUrl:
+      "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=800&q=80",
+    instagramHandle: "",
+    instagramUrl: "",
+    displayOrder: 3,
   },
 ];
 
 export const DEMO_SERVICES: DemoService[] = [
-  // --- HAIRCUT ---
   {
-    id: "3fcf167a-cc97-402b-a498-71f13c828b51", // Replaces test service in DB
-    nameEn: "Classic Tailored Haircut",
-    nameHu: "Klasszikus Személyre Szabott Hajvágás",
+    id: "f1111111-1111-4111-b111-111111111111",
+    nameEn: "Signature Russian E-File Manicure",
+    nameHu: "Signature Orosz Gépi Manikűr",
     descriptionEn:
-      "Comprehensive cranial consultation, precision scissor-and-clipper styling, invigorating botanical scalp wash, hot neck lather razor cleanup, and bespoke styling finish.",
+      "Flawless dry cuticle treatment with fine diamond e-file bits, followed by a strengthening base and ultra-clean gel coat close to the eponychium.",
     descriptionHu:
-      "Részletes fejforma-konzultáció, precíziós ollós és gépi vágás, frissítő hajmosás, meleg habos nyakborotválás és prémium finish termékek.",
-    category: "Haircut",
-    durationMinutes: 45,
-    priceEur: 35,
-    priceHuf: 14000,
-    isPopular: true,
-  },
-  {
-    id: "a1b2c3d4-e5f6-4a1b-8c2d-3e4f5a6b7c81",
-    nameEn: "Precision Skin Fade",
-    nameHu: "Precíziós Skin Fade",
-    descriptionEn:
-      "Seamless zero-gap transition blended to skin with foil shaver perfection, scissor-sculpted top, razor edge detailing, wash, and matte clay finish.",
-    descriptionHu:
-      "Fokozatmentes átmenet a nullától fóliás borotválással, ollóval megmunkált tetőhossz, éles kontúrok, hajmosás és matt waxos beállítás.",
-    category: "Haircut",
-    durationMinutes: 45,
-    priceEur: 38,
-    priceHuf: 15000,
-    isPopular: true,
-  },
-  {
-    id: "a1b2c3d4-e5f6-4a1b-8c2d-3e4f5a6b7c82",
-    nameEn: "Master Scissor Cut & Styling",
-    nameHu: "Mester Ollós Hajvágás & Styling",
-    descriptionEn:
-      "100% handcrafted scissor-over-comb architecture for medium and long profiles. Includes texture balancing, deep conditioning scalp massage, and natural flow blowout.",
-    descriptionHu:
-      "100%-ban kézi ollós hajvágás közép- és hosszú hajra. Textúrázás, mélykondicionáló fejbőrmasszázs és természetes szárítás.",
-    category: "Haircut",
-    durationMinutes: 60,
-    priceEur: 42,
-    priceHuf: 16500,
-  },
-  {
-    id: "a1b2c3d4-e5f6-4a1b-8c2d-3e4f5a6b7c83",
-    nameEn: "Long Hair Restyle & Conditioning",
-    nameHu: "Hosszú Haj Formázás & Ápolás",
-    descriptionEn:
-      "Tailored for shoulder-length or longer hair. Split-end elimination, layering, keratin restoration treatment, scalp therapy, and editorial blowout styling.",
-    descriptionHu:
-      "Vállig vagy tovább érő hajhoz. Hajvégek frissítése, rétegzés, keratinos ápoló pakolás, fejbőrterápia és szárítás.",
-    category: "Haircut",
-    durationMinutes: 60,
-    priceEur: 45,
-    priceHuf: 17500,
-  },
-
-  // --- BEARD ---
-  {
-    id: "a1b2c3d4-e5f6-4a1b-8c2d-3e4f5a6b7c84",
-    nameEn: "Beard Sculpt & Botanical Oil",
-    nameHu: "Szakállformázás & Növényi Olajos Ápolás",
-    descriptionEn:
-      "Freehand clipper sculpt, mustache detailing, stray trimming, warm towel compression, and organic cold-pressed beard serum application.",
-    descriptionHu:
-      "Szabadkézi gépi és ollós szakállformázás, bajuszigazítás, meleg törölközős puhítás és hidegen sajtolt prémium szakállolaj.",
-    category: "Beard",
-    durationMinutes: 30,
-    priceEur: 22,
-    priceHuf: 8500,
-  },
-  {
-    id: "a1b2c3d4-e5f6-4a1b-8c2d-3e4f5a6b7c85",
-    nameEn: "Beard Shape & Sharp Razor Line-Up",
-    nameHu: "Szakállkontúr & Éles Penge Kontúrozás",
-    descriptionEn:
-      "Full beard restructuring with razor-sharp cheek and throat perimeter definition using warm shaving cream and straight razor precision, followed by soothing aftershave balm.",
-    descriptionHu:
-      "Teljes szakállforma átalakítás éles orca- és nyakkontúrokkal, meleg habos egyenes pengés borotválással és hűsítő aftershave balzsammal.",
-    category: "Beard",
-    durationMinutes: 35,
-    priceEur: 26,
-    priceHuf: 10000,
-    isPopular: true,
-  },
-  {
-    id: "a1b2c3d4-e5f6-4a1b-8c2d-3e4f5a6b7c86",
-    nameEn: "Hot Towel Luxury Beard Ritual",
-    nameHu: "Forró Törölközős Luxus Szakállrituálé",
-    descriptionEn:
-      "Triple eucalyptus steamed hot towel compressions, pre-shave oil massage, precision razor shaping, nourishing butter mask, and beard brush blowout.",
-    descriptionHu:
-      "Háromszoros eukaliptuszos forró törölközős gőzölés, borotválkozás előtti olajos masszázs, pengés kontúrozás, tápláló szakállvaj pakolás.",
-    category: "Beard",
-    durationMinutes: 45,
-    priceEur: 32,
-    priceHuf: 12500,
-  },
-
-  // --- GROOMING PACKAGES ---
-  {
-    id: "a1b2c3d4-e5f6-4a1b-8c2d-3e4f5a6b7c87",
-    nameEn: "The Atelier Signature (Cut + Beard)",
-    nameHu: "Az Atelier Signature (Haj + Szakáll)",
-    descriptionEn:
-      "Our most requested combination. Complete tailored haircut or skin fade, accompanied by full razor-sculpted beard grooming, double hot towel wash, and complimentary espresso.",
-    descriptionHu:
-      "A legnépszerűbb kombinációnk. Személyre szabott hajvágás vagy fade, teljes borotvával kontúrozott szakállápolással, dupla forró törölközővel és eszpresszóval.",
-    category: "Grooming Packages",
+      "Kíméletes száraz gépi kutikula-kezelés gyémántfejekkel, erősítő alapozással és tartós, precíz géllakkozással.",
+    category: "Manicure & BIAB",
     durationMinutes: 75,
-    priceEur: 55,
-    priceHuf: 21500,
+    priceEur: 65,
+    priceHuf: 25500,
     isPopular: true,
   },
   {
-    id: "a1b2c3d4-e5f6-4a1b-8c2d-3e4f5a6b7c88",
-    nameEn: "Traditional Hot Towel Straight Razor Shave",
-    nameHu: "Hagyományos Forró Törölközős Pengés Borotválás",
+    id: "f2222222-2222-4222-b222-222222222222",
+    nameEn: "BIAB™ Natural Nail Strengthening",
+    nameHu: "BIAB™ Természetes Körömerősítés",
     descriptionEn:
-      "The quintessential barbering craft: steamed eucalyptus towels, badger brush lather, two-pass straight razor shave, ice towel pore close, and bay rum splash.",
+      "Builder-In-A-Bottle nourishing overlay engineered to reinforce weak natural nails, encourage healthy growth, and deliver weeks of chip-free wear.",
     descriptionHu:
-      "A klasszikus borbély élmény: eukaliptuszos forró törölközők, borzszőr pamaccsal vert meleg hab, kétkörös precíz pengés borotválás és jeges póruszárás.",
-    category: "Grooming Packages",
-    durationMinutes: 45,
-    priceEur: 35,
-    priceHuf: 13500,
-  },
-  {
-    id: "a1b2c3d4-e5f6-4a1b-8c2d-3e4f5a6b7c89",
-    nameEn: "The Royal Atelier Grooming Experience",
-    nameHu: "A Királyi Atelier Grooming Élmény",
-    descriptionEn:
-      "The definitive executive retreat: Tailored haircut, hot towel straight razor shave or luxury beard sculpt, exfoliating scalp treatment, ear/nose grooming, and single-origin espresso or whiskey.",
-    descriptionHu:
-      "A legmagasabb szintű feltöltődés: Egyedi hajvágás, forró törölközős borotválás vagy szakállápolás, mélytisztító fejbőrkezelés, aprólékos fül/orr szőrtelenítés és minőségi ital.",
-    category: "Grooming Packages",
+      "Tápláló építőzselés alapozás a természetes körmök megerősítésére, törésmentes tartóssággal és egészséges növekedéssel.",
+    category: "Manicure & BIAB",
     durationMinutes: 90,
     priceEur: 75,
     priceHuf: 29500,
+    isPopular: true,
+  },
+  {
+    id: "f3333333-3333-4333-b333-333333333333",
+    nameEn: "Bespoke Editorial Nail Art",
+    nameHu: "Egyedi Kézzel Festett Körömdíszítés",
+    descriptionEn:
+      "Tailored fine-line designs, glazed donut chrome, ethereal ombré, or miniature abstract florals painted individually for each guest.",
+    descriptionHu:
+      "Finom vonalas grafikák, krómfényű felületek, lágy ombré átmenetek vagy miniatűr virágmotívumok személyre szabottan festve.",
+    category: "Nail Art",
+    durationMinutes: 90,
+    priceEur: 85,
+    priceHuf: 33500,
+    isPopular: true,
+  },
+  {
+    id: "f4444444-4444-4444-b444-444444444444",
+    nameEn: "Gel-X™ Soft Gel Extensions",
+    nameHu: "Gel-X™ Puha Zselé Hosszabbítás",
+    descriptionEn:
+      "Full-cover soft gel tips applied without harsh chemicals, delivering instant natural length and flawless symmetry.",
+    descriptionHu:
+      "Teljes felületű puha zselé tipek vegyszermentes rögzítéssel, természetes hosszúsággal és tökéletes formával.",
+    category: "Nail Art",
+    durationMinutes: 105,
+    priceEur: 95,
+    priceHuf: 37500,
+  },
+  {
+    id: "f5555555-5555-4555-b555-555555555555",
+    nameEn: "Rose Petal Luxury Spa Pedicure",
+    nameHu: "Rózsavizes Luxus Spa Pedikűr",
+    descriptionEn:
+      "Warm rosewater soak, gentle sea-salt exfoliation, meticulous e-file callus smoothing, and nourishing botanical massage.",
+    descriptionHu:
+      "Meleg rózsavizes lábfürdő, tengeri sós peeling, gyengéd gépi bőrkeményedés-eltávolítás és tápláló növényi olajos masszázs.",
+    category: "Pedicure & Care",
+    durationMinutes: 75,
+    priceEur: 70,
+    priceHuf: 27500,
+  },
+  {
+    id: "f6666666-6666-4666-b666-666666666666",
+    nameEn: "Japanese Organic Nail Restoration",
+    nameHu: "Japán Organikus Méhviaszos Körömápolás",
+    descriptionEn:
+      "Chemical-free restorative treatment using beeswax paste and diatomaceous powder to impart a high natural shine and stimulate keratin synthesis.",
+    descriptionHu:
+      "Természetes méhviaszos és kovaföldes polírozás, amely vegyszermentes fényt ad és serkenti a köröm saját keratintermelését.",
+    category: "Rituals & Care",
+    durationMinutes: 60,
+    priceEur: 55,
+    priceHuf: 21500,
   },
 ];
 
 export const DEMO_PORTFOLIO: DemoPortfolioItem[] = [
   {
     id: "port-1",
-    titleEn: "Seamless Skin Fade with Textured Crop",
-    titleHu: "Fokozatmentes Skin Fade Texturált Felsőrésszel",
-    category: "Haircuts",
-    styleTagEn: "Skin Fade",
-    styleTagHu: "Skin Fade",
-    imageUrl: "https://images.unsplash.com/photo-1622288432450-277d0fef5ed6?auto=format&fit=crop&w=1200&q=80",
-    barberName: "Viktor Kovács",
+    titleEn: "Glazed Rose & Pearl Dust",
+    titleHu: "Rózsa-króm & Gyöngyfény",
+    category: "Nail Art",
+    styleTagEn: "Chrome Finish · Russian Prep",
+    styleTagHu: "Krómfény · Gépi előkészítés",
+    imageUrl: "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=1200&q=80",
+    barberName: "Camille Laurent",
   },
   {
     id: "port-2",
-    titleEn: "Classic Scissor Architecture & Natural Taper",
-    titleHu: "Klasszikus Ollós Vágás Természetes Nyakkontúrral",
-    category: "Haircuts",
-    styleTagEn: "Classic Scissor Cut",
-    styleTagHu: "Klasszikus Ollós",
-    imageUrl: "https://images.unsplash.com/photo-1504703395950-b89145a5425b?auto=format&fit=crop&w=1200&q=80",
-    barberName: "Barbod",
+    titleEn: "Minimalist Fine-Line French",
+    titleHu: "Minimalista Finomvonalas Francia",
+    category: "Gel & BIAB",
+    styleTagEn: "BIAB Base · Micro Tips",
+    styleTagHu: "BIAB Alap · Finom végek",
+    imageUrl: "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=1200&q=80",
+    barberName: "Éva Molnár",
   },
   {
     id: "port-3",
-    titleEn: "Sculpted Full Beard with Razor Line-Up",
-    titleHu: "Formázott Dús Szakáll Éles Pengés Kontúrral",
-    category: "Other",
-    styleTagEn: "Beard Fade",
-    styleTagHu: "Szakáll Fade",
-    imageUrl: "https://images.unsplash.com/photo-1599351431202-1e0f0137899a?auto=format&fit=crop&w=1200&q=80",
-    barberName: "Attila Nagy",
+    titleEn: "Cashmere Rose Nude Overlay",
+    titleHu: "Kasmír Rózsa Nude Megerősítés",
+    category: "Gel & BIAB",
+    styleTagEn: "Natural Silhouette · High Shine",
+    styleTagHu: "Természetes forma · Magas fény",
+    imageUrl: "https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=1200&q=80",
+    barberName: "Éva Molnár",
   },
   {
     id: "port-4",
-    titleEn: "Executive Slick Back with Mid Drop Fade",
-    titleHu: "Elegáns Hátrafésült Frizura Mid Drop Fade-del",
-    category: "Haircuts",
-    styleTagEn: "Slick Back",
-    styleTagHu: "Slick Back",
-    imageUrl: "https://images.unsplash.com/photo-1622286342621-4bd786c2447c?auto=format&fit=crop&w=1200&q=80",
-    barberName: "Barbod",
+    titleEn: "Soft Gel-X Almond Elegance",
+    titleHu: "Soft Gel-X Mandula Elegancia",
+    category: "Gel-X",
+    styleTagEn: "Sculpted Length · Sheer Blush",
+    styleTagHu: "Hosszabbított forma · Finom pír",
+    imageUrl: "https://images.unsplash.com/photo-1607779097040-26e80aa78e66?auto=format&fit=crop&w=1200&q=80",
+    barberName: "Camille Laurent",
   },
   {
     id: "port-5",
-    titleEn: "Traditional Straight Razor Shave & Hot Towel",
-    titleHu: "Hagyományos Egyenes Pengés Borotválás & Meleg Törölköző",
-    category: "Other",
-    styleTagEn: "Hot Towel Shave",
-    styleTagHu: "Forró Törölközős Borotválás",
-    imageUrl: "https://images.unsplash.com/photo-1621607512214-68297480165e?auto=format&fit=crop&w=1200&q=80",
-    barberName: "Attila Nagy",
+    titleEn: "Sheer Milky Rose with Micro Gold Flakes",
+    titleHu: "Tejes Rózsa Mikró Aranyfüsttel",
+    category: "Nail Art",
+    styleTagEn: "Micro Art · 24k Accent",
+    styleTagHu: "Mikrodíszítés · 24k arany akcentus",
+    imageUrl: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1200&q=80",
+    barberName: "Camille Laurent",
   },
   {
     id: "port-6",
-    titleEn: "Precision Scissor Taper & Volume Quiff",
-    titleHu: "Precíziós Ollós Átmenet és Dús Quiff Frizura",
-    category: "Haircuts",
-    styleTagEn: "Mid Fade",
-    styleTagHu: "Mid Fade",
-    imageUrl: "https://images.unsplash.com/photo-1621605815971-fbc98d665033?auto=format&fit=crop&w=1200&q=80",
-    barberName: "Viktor Kovács",
-  },
-  {
-    id: "port-7",
-    titleEn: "Precision Razor Beard Contouring & Moustache",
-    titleHu: "Precíziós Szakállvonal és Formázott Bajusz",
-    category: "Other",
-    styleTagEn: "Beard Trim",
-    styleTagHu: "Szakálligazítás",
-    imageUrl: "https://images.unsplash.com/photo-1621607512022-6aecc4fed814?auto=format&fit=crop&w=1200&q=80",
-    barberName: "Attila Nagy",
-  },
-  {
-    id: "port-8",
-    titleEn: "Long Hair Texture Shaping & Natural Flow",
-    titleHu: "Hosszú Férfi Haj Rétegezés & Természetes Esés",
-    category: "Styling",
-    styleTagEn: "Long Hair",
-    styleTagHu: "Hosszú Haj",
-    imageUrl: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=1200&q=80",
-    barberName: "Barbod",
-  },
-  {
-    id: "port-9",
-    titleEn: "Sharp Low Fade with Textured Top",
-    titleHu: "Hangsúlyos Low Fade Texturált Tetővel",
-    category: "Haircuts",
-    styleTagEn: "Low Fade",
-    styleTagHu: "Low Fade",
-    imageUrl: "https://images.unsplash.com/photo-1605497788044-5a32c7078486?auto=format&fit=crop&w=1200&q=80",
-    barberName: "Viktor Kovács",
-  },
-  {
-    id: "port-10",
-    titleEn: "Modern Voluminous Pompadour & Clean Temples",
-    titleHu: "Modern Dús Pompadour & Tiszta Halánték",
-    category: "Haircuts",
-    styleTagEn: "Classic Scissor Cut",
-    styleTagHu: "Klasszikus Ollós",
-    imageUrl: "https://images.unsplash.com/photo-1567894340315-735d7c361db0?auto=format&fit=crop&w=1200&q=80",
-    barberName: "Viktor Kovács",
-  },
-  {
-    id: "port-11",
-    titleEn: "Military Precision Buzz Cut & Razor Line",
-    titleHu: "Katonás Precíziós Buzz Cut & Kontúrozás",
-    category: "Haircuts",
-    styleTagEn: "Buzz Cut",
-    styleTagHu: "Buzz Cut",
-    imageUrl: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=1200&q=80",
-    barberName: "Viktor Kovács",
-  },
-  {
-    id: "port-12",
-    titleEn: "Straight Razor Detailing & Hot Towel Treatment",
-    titleHu: "Borotvás Kidolgozás & Forró Gőzös Kezelés",
-    category: "Other",
-    styleTagEn: "Beard Treatment",
-    styleTagHu: "Szakállkezelés",
-    imageUrl: "https://images.unsplash.com/photo-1593702295094-aea22597af65?auto=format&fit=crop&w=1200&q=80",
-    barberName: "Attila Nagy",
+    titleEn: "Japanese Organic Buff & Cuticle Ritual",
+    titleHu: "Japán Organikus Méhviaszos Polírozás",
+    category: "Spa Pedicure",
+    styleTagEn: "Chemical Free · Pure Keratin",
+    styleTagHu: "Vegyszermentes · Tiszta keratin",
+    imageUrl: "https://images.unsplash.com/photo-1519415510236-718bdfcd89c8?auto=format&fit=crop&w=1200&q=80",
+    barberName: "Sophie Varga",
   },
 ];
 
 export const DEMO_REVIEWS: DemoReview[] = [
   {
     id: "rev-1",
-    authorName: "Márk Varga",
+    authorName: "Zsófia Horváth",
     origin: "Budapest · District V",
     rating: 5,
     dateStr: "Yesterday",
-    serviceNameEn: "The Atelier Signature",
-    serviceNameHu: "Az Atelier Signature",
-    barberName: "Barbod",
+    serviceNameEn: "Signature Russian E-File Manicure",
+    serviceNameHu: "Signature Orosz Gépi Manikűr",
+    barberName: "Camille Laurent",
     commentEn:
-      "Barbod's attention to detail is truly unmatched in Budapest. The skin fade was surgical and the atmosphere with the single-origin espresso felt like a private club. Worth every forint.",
+      "Camille's attention to cuticle precision is unmatched in Budapest. My cuticles remained pristine for four weeks and the studio feels like a Parisian retreat.",
     commentHu:
-      "Barbod precizitása páratlan Budapesten. Az átmenet sebészi pontosságú volt, a friss eszpresszó és a zene pedig olyan hangulatot teremtett, mintha egy privát klubban lennék.",
+      "Camille precizitása páratlan Budapesten. A kutikulám négy hétig hibátlan maradt, a szalon pedig olyan nyugodt, mintha egy párizsi oázisban lennék.",
     isVerified: true,
   },
   {
     id: "rev-2",
-    authorName: "Julian Schneider",
+    authorName: "Claire Dumont",
     origin: "Vienna, Austria",
     rating: 5,
     dateStr: "3 days ago",
-    serviceNameEn: "Master Scissor Cut",
-    serviceNameHu: "Mester Ollós Hajvágás",
-    barberName: "Viktor Kovács",
+    serviceNameEn: "BIAB™ Natural Nail Strengthening",
+    serviceNameHu: "BIAB™ Természetes Körömerősítés",
+    barberName: "Éva Molnár",
     commentEn:
-      "I travel from Vienna to Budapest monthly for meetings. Viktor gave me arguably the best scissor cut I've had in Central Europe. The hot towel finish made my entire afternoon.",
+      "I travel from Vienna to Budapest regularly. Éva gave me the best BIAB overlay I've had in Central Europe. Zero chipping after three full weeks.",
     commentHu:
-      "Havi szinten utazom Bécsből Budapestre tárgyalásokra. Viktor vágta a legjobb ollós frizurát, amit valaha Közép-Európában kaptam. A forró törölközős lezárás csodás volt.",
+      "Bécsből járok Budapestre rendszeresen. Éva készítette a legszebb BIAB megerősítést, amit valaha kaptam. Három hét után is teljesen lepattogzásmentes.",
     isVerified: true,
   },
   {
     id: "rev-3",
-    authorName: "Bence Kovács",
-    origin: "Budapest · District VI",
+    authorName: "Anna Takács",
+    origin: "Budapest · District II",
     rating: 5,
     dateStr: "1 week ago",
-    serviceNameEn: "Hot Towel Luxury Beard Ritual",
-    serviceNameHu: "Forró Törölközős Luxus Szakállrituálé",
-    barberName: "Attila Nagy",
+    serviceNameEn: "Bespoke Editorial Nail Art",
+    serviceNameHu: "Egyedi Kézzel Festett Körömdíszítés",
+    barberName: "Camille Laurent",
     commentEn:
-      "Attila completely transformed my beard shape. Took his time with the steamed eucalyptus towels and straight razor lines. Truly a grooming atelier, not an assembly-line barbershop.",
+      "The hand-painted chrome details were breathtaking. An unhurried, mindful experience where you are welcomed with iced rose tea and total tranquility.",
     commentHu:
-      "Attila teljesen újjávarázsolta a szakállamat. Nem kapkodott, a forró eukaliptuszos törölközők és a penge precizitása lenyűgöző. Valódi műhely, nem futószalag.",
+      "A kézzel festett króm részletek egyszerűen lélegzetelállítóak. Nyugodt, figyelmes élmény: jeges rózsateával és teljes békével fogadtak.",
     isVerified: true,
   },
   {
     id: "rev-4",
-    authorName: "David Miller",
-    origin: "London, UK",
+    authorName: "Elena Varga",
+    origin: "Budapest · District VI",
     rating: 5,
     dateStr: "2 weeks ago",
-    serviceNameEn: "Precision Skin Fade",
-    serviceNameHu: "Precíziós Skin Fade",
-    barberName: "Viktor Kovács",
+    serviceNameEn: "Rose Petal Luxury Spa Pedicure",
+    serviceNameHu: "Rózsavizes Luxus Spa Pedikűr",
+    barberName: "Sophie Varga",
     commentEn:
-      "Booked online before flying into Budapest for the weekend. Flawless booking system with instant confirmation, zero waiting time, and Viktor delivered a razor-sharp mid fade. Stunning interior too.",
+      "The spa pedicure with fresh rose petals and organic oils was deeply restorative. My feet have never felt so soft. Sophie is wonderful.",
     commentHu:
-      "Online foglaltam még a londoni indulás előtt. Hibátlan rendszer, zéró várakozás a helyszínen, és Viktor tűpontos fade-et készített. Gyönyörű az enteriőr is.",
-    isVerified: true,
-  },
-  {
-    id: "rev-5",
-    authorName: "Tamás Balogh",
-    origin: "Budapest · District II",
-    rating: 5,
-    dateStr: "2 weeks ago",
-    serviceNameEn: "The Royal Atelier Experience",
-    serviceNameHu: "A Királyi Atelier Grooming Élmény",
-    barberName: "Barbod",
-    commentEn:
-      "The Royal Experience is 90 minutes of pure therapeutic relaxation. Premium botanical products, great conversation without being intrusive, and an immaculate haircut that lasts weeks.",
-    commentHu:
-      "A Királyi élmény 90 perc tiszta kikapcsolódás. Prémium növényi termékek, kellemes beszélgetés tolakodás nélkül, és egy olyan precíz vágás, ami hetekig tartja a formáját.",
-    isVerified: true,
-  },
-  {
-    id: "rev-6",
-    authorName: "Gábor Németh",
-    origin: "Budapest · District VII",
-    rating: 5,
-    dateStr: "3 weeks ago",
-    serviceNameEn: "Classic Tailored Haircut",
-    serviceNameHu: "Klasszikus Személyre Szabott Hajvágás",
-    barberName: "Barbod",
-    commentEn:
-      "Hands down the best barbershop on the Pest side. Impeccable cleanliness, luxury aesthetics with vintage leather Belmont chairs, and masters of their craft.",
-    commentHu:
-      "Kétségkívül a legjobb borbélyüzlet a pesti oldalon. Kifogástalan tisztaság, klasszikus Belmont bőr székek, prémium hangulat és igazi mesterek.",
+      "A friss rózsaszirmos spa pedikűr és az organikus olajok hihetetlenül feltöltöttek. A lábam még sosem volt ilyen puha. Sophie csodás szakember.",
     isVerified: true,
   },
 ];
@@ -518,27 +375,27 @@ export const DEMO_WORKING_HOURS: DemoWorkingDay[] = [
 
 export const DEMO_ATELIER_EXPERIENCE = [
   {
-    titleEn: "Bespoke Cranial Consultation",
-    titleHu: "Egyéni Fejforma-Konzultáció",
-    descEn: "We study bone structure, hair growth direction, and personal routine before touching shears.",
-    descHu: "Mielőtt az ollóhoz nyúlnánk, felmérjük a fejformát, a haj forgóit és a mindennapi szokásokat.",
+    titleEn: "Bespoke Cuticle & Nail Analysis",
+    titleHu: "Egyéni Köröm- és Bőranalízis",
+    descEn: "We inspect your nail architecture, plate thickness, and lifestyle routine before choosing formulations.",
+    descHu: "Alaposan felmérjük a körömlemezek vastagságát és állapotát a legmegfelelőbb anyagok kiválasztásához.",
   },
   {
-    titleEn: "Traditional Straight-Razor Rituals",
-    titleHu: "Hagyományos Pengés Rituálék",
-    descEn: "Steamed eucalyptus towels, badger bristle lather, and surgical straight-razor contouring.",
-    descHu: "Gőzölt eukaliptuszos törölközők, pamacsos meleg hab és borotvaéles kontúrozás.",
+    titleEn: "Sterilized Medical-Grade Instruments",
+    titleHu: "Orvosi Tisztaságú Sterilizálás",
+    descEn: "Hospital-grade autoclaved diamond e-file bits and single-use disposable files for unconditional hygiene.",
+    descHu: "Autoklávban sterilizált gyémántcsiszoló fejek és egyszer használatos reszelők a maximális higiéniáért.",
   },
   {
-    titleEn: "Complimentary Atelier Bar",
-    titleHu: "Díjmentes Kávé & Italok",
-    descEn: "Fresh single-origin espresso, mineral water, or Japanese craft whiskey with every visit.",
-    descHu: "Frissen őrölt prémium eszpresszó, ásványvíz vagy minőségi japán whiskey minden vendégünknek.",
+    titleEn: "Artisanal Refreshments & Tea",
+    titleHu: "Prémium Rózsa- és Zöldteák",
+    descEn: "Complimentary French sparkling rosewater, organic loose-leaf herbal teas, and artisan espresso.",
+    descHu: "Díjmentes francia rózsavíz, prémium szálas bioszálas teák és friss eszpresszó minden vendégünknek.",
   },
   {
-    titleEn: "Vintage Belmont Comfort",
-    titleHu: "Eredeti Belmont Bőrfotelek",
-    descEn: "Restored vintage Japanese leather barber chairs engineered for optimum ergonomic relaxation.",
-    descHu: "Felújított klasszikus japán bőr borbélyfotelek a maximális kényelem és ellazulás érdekében.",
+    titleEn: "Ergonomic Treatment Lounges",
+    titleHu: "Ergonomikus Pihentető Fotelek",
+    descEn: "Plush, cloud-soft seating designed for effortless spinal relaxation during restorative appointments.",
+    descHu: "Kényelmes, puha fotelkialakítás a teljes ellazulásért a szépítő kezelések ideje alatt.",
   },
 ];

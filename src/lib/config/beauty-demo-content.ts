@@ -85,8 +85,8 @@ export const BEAUTY_DEMO_BUSINESS = {
   transitEn: "M1 Opera station (1 min walk) · Deák Ferenc tér (5 min walk)",
   transitHu: "M1 Opera megálló (1 perc séta) · Deák Ferenc tér (5 perc séta)",
   phone: "+36 1 458 9200",
-  email: "bonjour@maisonrose-studio.hu",
-  instagramHandle: "@maisonrose.budapest",
+  email: "bonjour",
+  instagramHandle: "",
   rating: 4.98,
   reviewCount: 210,
   disclaimerEn: "Concept & Demo Identity · Fictional Luxury Showcase",
@@ -107,7 +107,7 @@ export const BEAUTY_DEMO_ARTISTS: BeautyArtist[] = [
     specialtiesHu: ["Orosz gépi manikűr", "Kézzel festett mikrominták", "Krómfények"],
     photoUrl:
       "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80",
-    instagramHandle: "@camille.nails",
+    instagramHandle: "",
   },
   {
     id: "artist-eva",
@@ -122,7 +122,7 @@ export const BEAUTY_DEMO_ARTISTS: BeautyArtist[] = [
     specialtiesHu: ["BIAB körömerősítés", "Soft Gel-X", "Természetes körömápolás"],
     photoUrl:
       "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=800&q=80",
-    instagramHandle: "@eva.maisonrose",
+    instagramHandle: "",
   },
   {
     id: "artist-sophie",
@@ -137,7 +137,7 @@ export const BEAUTY_DEMO_ARTISTS: BeautyArtist[] = [
     specialtiesHu: ["Rózsás spa pedikűr", "Japán manikűr", "Aromaterápia"],
     photoUrl:
       "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=80",
-    instagramHandle: "@sophie.atelier",
+    instagramHandle: "",
   },
 ];
 

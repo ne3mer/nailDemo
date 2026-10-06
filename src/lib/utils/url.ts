@@ -6,7 +6,7 @@
  * 2. NEXT_PUBLIC_SITE_URL environment variable
  * 3. VERCEL_PROJECT_PRODUCTION_URL environment variable (e.g. barbod-gold.vercel.app)
  * 4. VERCEL_URL environment variable (e.g. deployment host)
- * 5. Production fallback: https://barbod-gold.vercel.app
+ * 5. Production fallback: https://maison-rose.demo
  * 6. Development fallback: http://localhost:3000
  */
 export async function getCanonicalSiteUrl(): Promise<string> {
@@ -34,7 +34,7 @@ export async function getCanonicalSiteUrl(): Promise<string> {
     return `https://${process.env.VERCEL_URL.replace(/\/$/, "")}`;
   }
   if (process.env.NODE_ENV === "production") {
-    return "https://barbod-gold.vercel.app";
+    return "https://maison-rose.demo";
   }
   return "http://localhost:3000";
 }

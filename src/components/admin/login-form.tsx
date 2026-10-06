@@ -13,7 +13,7 @@ function isValidEmail(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 }
 
-export function LoginForm() {
+export function LoginForm({ isConfigured = true }: { isConfigured?: boolean }) {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -23,6 +23,11 @@ export function LoginForm() {
   function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError(null);
+
+    if (!isConfigured) {
+      setError("Admin sign in unavailable: Database credentials are not configured in this demo.");
+      return;
+    }
 
     const trimmedEmail = email.trim();
     if (!trimmedEmail || !isValidEmail(trimmedEmail)) {
@@ -39,19 +44,23 @@ export function LoginForm() {
     }
 
     startTransition(async () => {
-      const supabase = createClient();
-      const { error: signInError } = await supabase.auth.signInWithPassword({
-        email: trimmedEmail,
-        password,
-      });
+      try {
+        const supabase = createClient();
+        const { error: signInError } = await supabase.auth.signInWithPassword({
+          email: trimmedEmail,
+          password,
+        });
 
-      if (signInError) {
-        setError(getAuthErrorMessage(signInError));
-        return;
+        if (signInError) {
+          setError(getAuthErrorMessage(signInError));
+          return;
+        }
+
+        router.replace("/admin");
+        router.refresh();
+      } catch (err: unknown) {
+        setError(err instanceof Error ? err.message : "Authentication unavailable.");
       }
-
-      router.replace("/admin");
-      router.refresh();
     });
   }
 
@@ -67,9 +76,9 @@ export function LoginForm() {
           inputMode="email"
           value={email}
           onChange={(event) => setEmail(event.target.value)}
-          disabled={isPending}
+          disabled={isPending || !isConfigured}
           aria-invalid={Boolean(error)}
-          placeholder="you@studio.com"
+          placeholder="owner@maisonrose-studio.hu"
           required
         />
       </div>
@@ -83,7 +92,7 @@ export function LoginForm() {
           autoComplete="current-password"
           value={password}
           onChange={(event) => setPassword(event.target.value)}
-          disabled={isPending}
+          disabled={isPending || !isConfigured}
           aria-invalid={Boolean(error)}
           placeholder="••••••••"
           required
@@ -96,8 +105,8 @@ export function LoginForm() {
         </p>
       ) : null}
 
-      <Button type="submit" className="w-full" size="lg" disabled={isPending}>
-        {isPending ? "Signing in…" : "Sign in"}
+      <Button type="submit" className="w-full" size="lg" disabled={isPending || !isConfigured}>
+        {isPending ? "Signing in…" : isConfigured ? "Sign in" : "Sign in (Demo Disabled)"}
       </Button>
     </form>
   );

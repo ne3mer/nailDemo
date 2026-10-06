@@ -5,7 +5,7 @@ import { requireAdminContext } from "@/lib/auth/session";
 import { BarbersManager } from "@/components/admin/barbers-manager";
 
 export const metadata = {
-  title: "Barbers & Staff Management | Barbod Admin",
+  title: "Barbers & Staff Management | Maison Rose Admin",
 };
 
 export default async function AdminBarbersPage() {

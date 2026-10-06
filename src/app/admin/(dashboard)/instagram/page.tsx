@@ -3,7 +3,7 @@ import { fetchInstagramFeed } from "@/lib/instagram/client";
 import { InstagramManager } from "@/components/admin/instagram-manager";
 
 export const metadata = {
-  title: "Instagram Connection | Barbod Admin",
+  title: "Instagram Connection | Maison Rose Admin",
 };
 
 export default async function AdminInstagramPage() {

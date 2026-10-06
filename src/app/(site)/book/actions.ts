@@ -3,6 +3,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getPublicBusiness } from "@/lib/public/business";
+import { isSupabaseConfigured } from "@/lib/env";
 import {
   calculateAvailableSlots,
   getAvailableDates,
@@ -22,6 +23,9 @@ export type PublicBookingInput = {
   notes?: string | null;
 };
 
+// Realistic mock slots for interactive demo preview when database is unconfigured
+const DEMO_PREVIEW_SLOTS = ["10:00", "11:30", "14:00", "15:30", "17:00", "18:30"];
+
 export async function fetchAvailableSlotsAction(
   barberId: string,
   serviceId: string,
@@ -31,19 +35,38 @@ export async function fetchAvailableSlotsAction(
     return { slots: [] };
   }
 
-  const business = await getPublicBusiness("barbod-barber");
+  const business = await getPublicBusiness("maison-rose");
   if (!business) {
-    return { slots: [], error: "Business not found." };
+    return { slots: [], error: "Studio not found." };
   }
 
-  const slots = await calculateAvailableSlots({
-    businessId: business.id,
-    barberId,
-    serviceId,
-    dateStr,
-  });
+  // Demo fallback when Supabase is not configured
+  if (!isSupabaseConfigured()) {
+    const slots: AvailableSlot[] = DEMO_PREVIEW_SLOTS.map((timeStr) => {
+      const startUtc = budapestDateTimeToUtc(dateStr, timeStr);
+      const endUtc = new Date(startUtc.getTime() + 75 * 60 * 1000);
+      return {
+        timeStr,
+        formattedTime: timeStr,
+        startUtc: startUtc.toISOString(),
+        endUtc: endUtc.toISOString(),
+      };
+    });
+    return { slots };
+  }
 
-  return { slots };
+  try {
+    const slots = await calculateAvailableSlots({
+      businessId: business.id,
+      barberId,
+      serviceId,
+      dateStr,
+    });
+    return { slots };
+  } catch (err: unknown) {
+    console.warn("[Demo Mode] Availability calculation fallback:", err instanceof Error ? err.message : String(err));
+    return { slots: [] };
+  }
 }
 
 export async function fetchAvailableDatesAction(
@@ -54,21 +77,46 @@ export async function fetchAvailableDatesAction(
     return { dates: [] };
   }
 
-  const business = await getPublicBusiness("barbod-barber");
+  const business = await getPublicBusiness("maison-rose");
   if (!business) {
-    return { dates: [], error: "Business not found." };
+    return { dates: [], error: "Studio not found." };
   }
 
-  const dates = await getAvailableDates(business.id, barberId, serviceId, 30);
-  return { dates };
+  // Demo fallback when Supabase is not configured: next 30 days excluding Sundays
+  if (!isSupabaseConfigured()) {
+    const dates: string[] = [];
+    const today = new Date();
+    for (let i = 1; i <= 30; i++) {
+      const d = new Date(today.getTime() + i * 24 * 60 * 60 * 1000);
+      if (d.getDay() !== 0) { // Exclude Sunday
+        dates.push(d.toISOString().slice(0, 10));
+      }
+    }
+    return { dates };
+  }
+
+  try {
+    const dates = await getAvailableDates(business.id, barberId, serviceId, 30);
+    return { dates };
+  } catch {
+    return { dates: [] };
+  }
 }
 
 export async function createPublicBookingAction(data: PublicBookingInput) {
-  const slug = data.businessSlug || "barbod-barber";
+  // Fail-closed guard: Disallow actual booking creation until isolated database is configured
+  if (!isSupabaseConfigured()) {
+    return {
+      error: "Demo booking unavailable: A dedicated Supabase project is not yet configured for Maison Rose.",
+      errorCode: "DEMO_MODE",
+    };
+  }
+
+  const slug = data.businessSlug || "maison-rose";
   const business = await getPublicBusiness(slug);
 
   if (!business) {
-    return { error: "Business not found.", errorCode: "GENERIC" };
+    return { error: "Studio not found.", errorCode: "GENERIC" };
   }
 
   if (!data.customerName?.trim()) {
@@ -78,7 +126,7 @@ export async function createPublicBookingAction(data: PublicBookingInput) {
     return { error: "Phone number is required.", errorCode: "REQUIRED_FIELDS" };
   }
   if (!data.barberId || !data.serviceId || !data.dateStr || !data.startTimeStr) {
-    return { error: "Barber, service, date, and time slot are required.", errorCode: "REQUIRED_FIELDS" };
+    return { error: "Artist, service, date, and time slot are required.", errorCode: "REQUIRED_FIELDS" };
   }
 
   const supabase = await createClient();
@@ -92,7 +140,7 @@ export async function createPublicBookingAction(data: PublicBookingInput) {
     .single();
 
   if (barErr || !barber || !barber.is_active) {
-    return { error: "Selected barber is unavailable.", errorCode: "SERVICE_UNAVAILABLE" };
+    return { error: "Selected artist is unavailable.", errorCode: "SERVICE_UNAVAILABLE" };
   }
 
   // 2. Validate service belongs to business & is active
@@ -117,7 +165,7 @@ export async function createPublicBookingAction(data: PublicBookingInput) {
     .maybeSingle();
 
   if (!assignment) {
-    return { error: "Selected barber does not offer this service.", errorCode: "SERVICE_UNAVAILABLE" };
+    return { error: "Selected artist does not offer this treatment.", errorCode: "SERVICE_UNAVAILABLE" };
   }
 
   // 4. Derive start and end UTC timestamps server-side
@@ -150,7 +198,7 @@ export async function createPublicBookingAction(data: PublicBookingInput) {
   }
 
   if (occupied && occupied.length > 0) {
-    return { error: "This time is no longer available with this barber. Please choose another time.", errorCode: "SLOT_UNAVAILABLE" };
+    return { error: "This time is no longer available with this artist. Please choose another time.", errorCode: "SLOT_UNAVAILABLE" };
   }
 
   // 6. Insert public appointment with status = 'pending'
@@ -177,7 +225,7 @@ export async function createPublicBookingAction(data: PublicBookingInput) {
   if (insertError) {
     console.error("Public booking insert failed", insertError.message);
     if (insertError.message.includes("appointments_no_overlap")) {
-      return { error: "This time is no longer available with this barber. Please choose another time.", errorCode: "SLOT_UNAVAILABLE" };
+      return { error: "This time is no longer available with this artist. Please choose another time.", errorCode: "SLOT_UNAVAILABLE" };
     }
     return { error: "An error occurred while creating your booking. Please try again.", errorCode: "GENERIC" };
   }
@@ -192,7 +240,6 @@ export async function createPublicBookingAction(data: PublicBookingInput) {
 
   return {
     success: true,
-
     booking: {
       id: inserted.id,
       barberName: barber.name,

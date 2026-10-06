@@ -21,7 +21,7 @@ export const metadata = {
 };
 
 export default async function HomePage() {
-  const business = await getPublicBusiness("barbod-barber");
+  const business = await getPublicBusiness("maison-rose");
 
   if (!business) {
     return (
@@ -39,7 +39,7 @@ export default async function HomePage() {
     getPublicServices(business.id),
     getPublicPortfolio(business.id),
     getPublicWorkingHours(business.id),
-    fetchInstagramFeed(),
+    fetchInstagramFeed(false, business.id),
   ]);
 
   return (

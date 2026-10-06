@@ -111,7 +111,7 @@ export async function scheduleBookingNotifications(appointmentId: string, custom
       dateStr: parts.formattedDate,
       timeStr: parts.formattedTime,
       durationMinutes: appointment.services?.duration_minutes || 30,
-      studioName: appointment.businesses?.name || 'Barbod Barber',
+      studioName: appointment.businesses?.name || 'Maison Rose',
       studioAddress: appointment.businesses?.address || undefined,
       note: appointment.notes || undefined,
       status: appointment.status,
@@ -233,7 +233,7 @@ export async function scheduleConfirmationNotification(appointmentId: string, cu
       dateStr: parts.formattedDate,
       timeStr: parts.formattedTime,
       durationMinutes: appointment.services?.duration_minutes || 30,
-      studioName: appointment.businesses?.name || 'Barbod Barber',
+      studioName: appointment.businesses?.name || 'Maison Rose',
       studioAddress: appointment.businesses?.address || undefined,
     };
 
@@ -299,7 +299,7 @@ export async function scheduleCancellationNotifications(appointmentId: string, c
       barberName: appointment.barbers?.name || 'Barber',
       dateStr: parts.formattedDate,
       timeStr: parts.formattedTime,
-      studioName: appointment.businesses?.name || 'Barbod Barber',
+      studioName: appointment.businesses?.name || 'Maison Rose',
     };
 
     const jobsToInsert: NotificationJobInsert[] = [];
@@ -401,7 +401,7 @@ export async function scheduleRescheduleNotifications(
       previousDateStr: oldParts.formattedDate,
       previousTimeStr: oldParts.formattedTime,
       durationMinutes: appointment.services?.duration_minutes || 30,
-      studioName: appointment.businesses?.name || 'Barbod Barber',
+      studioName: appointment.businesses?.name || 'Maison Rose',
       studioAddress: appointment.businesses?.address || undefined,
     };
 
@@ -589,7 +589,7 @@ export async function scheduleDailyBarberDigests(dateStrBudapest: string, custom
         dateStr: dateStrBudapest,
         totalAppointments: appItems.length,
         appointments: appItems,
-        studioName: businessObj?.name || 'Barbod Barber',
+        studioName: businessObj?.name || 'Maison Rose',
       };
 
       const { error } = await supabase

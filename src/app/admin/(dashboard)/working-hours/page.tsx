@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { WorkingHoursEditor } from "@/components/admin/working-hours-editor";
 
 export const metadata = {
-  title: "Working Hours | Barbod Admin",
+  title: "Working Hours | Maison Rose Admin",
 };
 
 export default async function AdminWorkingHoursPage() {

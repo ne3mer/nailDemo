@@ -21,14 +21,14 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     const params = new URLSearchParams(window.location.search);
     const urlLang = params.get("lang");
     if (urlLang === "hu" || urlLang === "en") return urlLang;
-    const saved = localStorage.getItem("barbod_lang");
+    const saved = localStorage.getItem("maison_rose_lang");
     if (saved === "hu" || saved === "en") return saved;
     return "en";
   });
 
   const setLang = React.useCallback((nextLang: Language) => {
     setLangState(nextLang);
-    localStorage.setItem("barbod_lang", nextLang);
+    localStorage.setItem("maison_rose_lang", nextLang);
 
     // Update URL query parameter cleanly without reloading
     const url = new URL(window.location.href);

@@ -115,7 +115,7 @@ export function AdminShell({
                 <Briefcase className="size-4" />
               </div>
               <span className="font-serif text-base font-semibold">
-                Barbod {role === "staff" ? "Staff" : "Admin"}
+                Maison Rose {role === "staff" ? "Staff" : "Admin"}
               </span>
             </Link>
 

@@ -4,7 +4,7 @@ import { SettingsEditor } from "@/components/admin/settings-editor";
 import { OwnerAccountEmailCard } from "@/components/admin/owner-account-email-card";
 
 export const metadata = {
-  title: "Settings | Barbod Admin",
+  title: "Settings | Maison Rose Admin",
 };
 
 export default async function AdminSettingsPage() {

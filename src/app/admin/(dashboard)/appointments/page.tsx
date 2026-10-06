@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { AppointmentsManager } from "@/components/admin/appointments-manager";
 
 export const metadata = {
-  title: "Schedule & Appointments | Barbod Admin",
+  title: "Schedule & Appointments | Maison Rose Admin",
 };
 
 export default async function AdminAppointmentsPage({

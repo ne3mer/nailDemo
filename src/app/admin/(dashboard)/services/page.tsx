@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { ServicesManager } from "@/components/admin/services-manager";
 
 export const metadata = {
-  title: "Services | Barbod Admin",
+  title: "Services | Maison Rose Admin",
 };
 
 export default async function AdminServicesPage({

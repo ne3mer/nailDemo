@@ -1,0 +1,45 @@
+# Dependencies
+node_modules/
+/.pnp
+.pnp.js
+
+# Environment files
+.env
+.env*.local
+.env.local
+.env.development
+.env.test
+.env.production
+.env.barbod.backup
+*.env*
+
+# Next.js build output
+.next/
+out/
+build/
+dist/
+
+# Vercel
+.vercel
+
+# Supabase
+supabase/.temp/
+supabase/.branches/
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# System files
+.DS_Store
+*.DS_Store
+Thumbs.db
+
+# IDE & Scratch
+.idea/
+.vscode/
+scratch/
+*.swp
+*.swo

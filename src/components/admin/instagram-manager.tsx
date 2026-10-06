@@ -74,7 +74,7 @@ export function InstagramManager({ feed, userRole }: InstagramManagerProps) {
 
   const isConnected = feed.connectionStatus === "CONNECTED";
   const isExpired = feed.connectionStatus === "EXPIRED";
-  const accountName = feed.connectedAccount?.username || "barbod.barber.hu";
+  const accountName = feed.connectedAccount?.username || "maisonrose.budapest";
   const isOwner = userRole === "owner";
 
   return (
@@ -90,7 +90,7 @@ export function InstagramManager({ feed, userRole }: InstagramManagerProps) {
             Instagram Feed Connection
           </h1>
           <p className="text-xs text-muted-foreground mt-0.5 max-w-xl">
-            Connect your Barbod Instagram account (@barbod.barber.hu) via official Meta OAuth authorization to display recent work in &quot;From the Atelier&quot;.
+            Connect your Maison Rose Instagram account (@maisonrose.budapest) via official Meta OAuth authorization to display recent work in &quot;From the Atelier&quot;.
           </p>
         </div>
 
@@ -163,7 +163,7 @@ export function InstagramManager({ feed, userRole }: InstagramManagerProps) {
                 ? `Authorized as @${accountName}. Serving live media posts from Instagram Platform API.`
                 : isExpired
                 ? "Your Instagram Access Token has expired. Please re-authorize your account."
-                : "No live Instagram account authorized. Authorize @barbod.barber.hu to replace fallback media with live posts."}
+                : "No live Instagram account authorized. Authorize @maisonrose.budapest to replace fallback media with live posts."}
             </p>
           </div>
 
@@ -331,7 +331,7 @@ export function InstagramManager({ feed, userRole }: InstagramManagerProps) {
             <li>In Instagram Settings, add the exact OAuth Redirect URI:
               <br />
               <code className="font-mono text-primary bg-primary/10 px-1 py-0.5 rounded ml-4 inline-block my-1">
-                https://barbod-gold.vercel.app/api/auth/instagram/callback
+                https://maison-rose.demo/api/auth/instagram/callback
               </code>
             </li>
             <li>Request minimal permission: <code className="font-mono text-primary">instagram_business_basic</code>.</li>

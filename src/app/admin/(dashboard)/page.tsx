@@ -18,7 +18,7 @@ import { utcToBudapestParts } from "@/lib/utils/dates";
 import { Badge } from "@/components/ui/badge";
 
 export const metadata = {
-  title: "Dashboard | Barbod Admin",
+  title: "Dashboard | Maison Rose Admin",
 };
 
 function budapestDayKey(date: Date) {

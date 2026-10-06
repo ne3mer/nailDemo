@@ -40,9 +40,15 @@ export interface SendEmailResult {
 export async function sendNotificationEmail({
   to,
   type,
-  locale = 'hu',
+  locale = "hu",
   payload,
 }: SendEmailOptions): Promise<SendEmailResult> {
+  if (process.env.ENABLE_NOTIFICATIONS !== "true") {
+    return {
+      success: true,
+      messageId: "notifications-disabled-by-flag",
+    };
+  }
   const resend = getResendClient();
   if (!resend) {
     console.warn(`[Email Dispatcher] Skipped sending '${type}' to ${to} (RESEND_API_KEY missing)`);

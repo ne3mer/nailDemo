@@ -23,6 +23,40 @@ DECLARE
   v_svc_japanese UUID  := 'f6666666-6666-4666-b666-666666666666';
 BEGIN
 
+  -- 0. Ensure required Auth User and Profile exists for owner relationship
+  IF NOT EXISTS (SELECT 1 FROM auth.users WHERE id = v_owner_id) THEN
+    INSERT INTO auth.users (
+      instance_id,
+      id,
+      aud,
+      role,
+      email,
+      encrypted_password,
+      email_confirmed_at,
+      raw_app_meta_data,
+      raw_user_meta_data,
+      created_at,
+      updated_at
+    )
+    VALUES (
+      '00000000-0000-0000-0000-000000000000',
+      v_owner_id,
+      'authenticated',
+      'authenticated',
+      'owner@maisonrose-studio.hu',
+      extensions.crypt('MaisonRoseDemo2026!', extensions.gen_salt('bf')),
+      NOW(),
+      '{"provider":"email","providers":["email"]}'::jsonb,
+      '{"full_name":"Camille Laurent"}'::jsonb,
+      NOW(),
+      NOW()
+    );
+  END IF;
+
+  INSERT INTO public.profiles (id, full_name)
+  VALUES (v_owner_id, 'Camille Laurent')
+  ON CONFLICT (id) DO UPDATE SET full_name = EXCLUDED.full_name;
+
   -- 1. Insert or Update Business: Maison Rose
   INSERT INTO public.businesses (
     id,
@@ -42,7 +76,7 @@ BEGIN
     v_business_id,
     v_owner_id,
     'Maison Rose — Nail & Beauty Studio',
-    'barbod-barber', -- Preserves default internal slug contract for compatibility
+    'maison-rose',
     'An unhurried sanctuary dedicated to Russian e-file manicures, BIAB nail strengthening, and bespoke hand-painted artistry in the heart of Budapest.',
     'Nyugodt, légies szentély a gépi orosz manikűr, a BIAB körömerősítés és az egyedi kézzel festett körömdíszítés számára Budapest szívében.',
     '+36 1 458 9200',

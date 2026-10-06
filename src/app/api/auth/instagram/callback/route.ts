@@ -110,7 +110,7 @@ export async function GET(request: NextRequest) {
       headers: { Accept: "application/json" },
     });
 
-    let username = "barbod.barber.hu";
+    let username = "maisonrose.budapest";
     let instagramUserId = initialUserId || "unknown";
 
     if (profileRes.ok) {

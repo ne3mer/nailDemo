@@ -906,7 +906,7 @@ export function BarbersManager({ barbers, allServices, ownerUserId }: BarbersMan
                   id="b_name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="e.g. Barbod, Alex, Marco"
+                  placeholder="e.g. Camille, Éva, Sophie"
                   required
                 />
               </div>
