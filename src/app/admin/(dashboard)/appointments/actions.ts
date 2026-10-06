@@ -1,0 +1,445 @@
+"use server";
+
+import { revalidatePath } from "next/cache";
+import { getAdminContext } from "@/lib/auth/session";
+import { createClient } from "@/lib/supabase/server";
+import {
+  budapestDateTimeToUtc,
+  utcToBudapestParts,
+  timeStringToMinutes,
+} from "@/lib/utils/dates";
+import type { AppointmentStatus } from "@/types";
+
+export type AppointmentInput = {
+  barber_id: string;
+  service_id: string;
+  customer_name: string;
+  customer_phone: string;
+  customer_email?: string | null;
+  startDate: string; // YYYY-MM-DD
+  startTime: string; // HH:MM
+  notes?: string | null;
+  status?: AppointmentStatus;
+};
+
+export async function createAppointmentAction(data: AppointmentInput) {
+  const context = await getAdminContext();
+  if (!context) {
+    return { error: "Unauthorized." };
+  }
+
+  const business = context.business;
+
+  // If staff, force barber_id to be context.barber.id
+  if (context.role === "staff") {
+    if (!context.barber) {
+      return { error: "Staff barber profile not found." };
+    }
+    data.barber_id = context.barber.id;
+  }
+
+  if (!data.barber_id) {
+    return { error: "Please select a barber." };
+  }
+  if (!data.service_id) {
+    return { error: "Please select a service." };
+  }
+  if (!data.customer_name?.trim()) {
+    return { error: "Customer name is required." };
+  }
+  if (!data.customer_phone?.trim()) {
+    return { error: "Customer phone is required." };
+  }
+
+  const supabase = await createClient();
+
+  // 1. Verify barber belongs to business & is active
+  const { data: barber, error: barErr } = await supabase
+    .from("barbers")
+    .select("*")
+    .eq("id", data.barber_id)
+    .eq("business_id", business.id)
+    .single();
+
+  if (barErr || !barber) {
+    return { error: "Invalid barber selected." };
+  }
+
+  // 2. Verify service belongs to business
+  const { data: service, error: svcError } = await supabase
+    .from("services")
+    .select("*")
+    .eq("id", data.service_id)
+    .eq("business_id", business.id)
+    .single();
+
+  if (svcError || !service) {
+    return { error: "Invalid service selected." };
+  }
+
+  // 3. Verify barber offers service
+  const { data: assignment } = await supabase
+    .from("barber_services")
+    .select("barber_id")
+    .eq("barber_id", data.barber_id)
+    .eq("service_id", data.service_id)
+    .maybeSingle();
+
+  if (!assignment) {
+    return { error: "Selected barber does not offer this service." };
+  }
+
+  // 4. Calculate start and end UTC timestamps
+  const startUtc = budapestDateTimeToUtc(data.startDate, data.startTime);
+  const endUtc = new Date(
+    startUtc.getTime() + service.duration_minutes * 60 * 1000
+  );
+
+  const startIso = startUtc.toISOString();
+  const endIso = endUtc.toISOString();
+
+  // 5. Check barber appointment overlaps
+  const { data: appOverlaps } = await supabase
+    .from("appointments")
+    .select("id, customer_name, start_at, end_at")
+    .eq("barber_id", data.barber_id)
+    .in("status", ["pending", "confirmed"])
+    .lt("start_at", endIso)
+    .gt("end_at", startIso);
+
+  if (appOverlaps && appOverlaps.length > 0) {
+    return {
+      error: `Overlapping appointment for ${barber.name}! Conflict with booking for ${appOverlaps[0].customer_name}.`,
+    };
+  }
+
+  // 6. Check barber blocked times overlaps
+  const { data: blockedOverlaps } = await supabase
+    .from("blocked_times")
+    .select("id, reason")
+    .eq("barber_id", data.barber_id)
+    .lt("start_at", endIso)
+    .gt("end_at", startIso);
+
+  if (blockedOverlaps && blockedOverlaps.length > 0) {
+    const reasonText = blockedOverlaps[0].reason
+      ? ` (${blockedOverlaps[0].reason})`
+      : "";
+    return {
+      error: `Cannot create appointment during ${barber.name}'s blocked time period${reasonText}.`,
+    };
+  }
+
+  // 7. Check barber working hours
+  const startParts = utcToBudapestParts(startUtc);
+  const endParts = utcToBudapestParts(endUtc);
+
+  const { data: workingHours } = await supabase
+    .from("working_hours")
+    .select("*")
+    .eq("barber_id", data.barber_id)
+    .eq("day_of_week", startParts.dayOfWeek)
+    .eq("is_active", true);
+
+  if (!workingHours || workingHours.length === 0) {
+    return { error: `${barber.name} is not scheduled to work on this day.` };
+  }
+
+  const appStartMins = timeStringToMinutes(startParts.timeStr);
+  const appEndMins = timeStringToMinutes(endParts.timeStr);
+
+  const fitsInSchedule = workingHours.some((wh) => {
+    const whStartMins = timeStringToMinutes(wh.start_time);
+    const whEndMins = timeStringToMinutes(wh.end_time);
+    return appStartMins >= whStartMins && appEndMins <= whEndMins;
+  });
+
+  if (!fitsInSchedule) {
+    return {
+      error: `Appointment duration falls outside ${barber.name}'s working hours for this day.`,
+    };
+  }
+
+  // 8. Insert appointment with barber_id
+  const { data: inserted, error: insertError } = await supabase.from("appointments").insert({
+    business_id: business.id,
+    barber_id: barber.id,
+    service_id: service.id,
+    customer_name: data.customer_name.trim(),
+    customer_phone: data.customer_phone.trim(),
+    customer_email: data.customer_email?.trim() || null,
+    notes: data.notes?.trim() || null,
+    start_at: startIso,
+    end_at: endIso,
+    status: data.status || "confirmed",
+  }).select("id").single();
+
+  if (insertError) {
+    console.error("Failed to insert appointment", insertError.message);
+    if (insertError.message.includes("appointments_no_overlap")) {
+      return { error: `This time slot is already booked for ${barber.name}.` };
+    }
+    return { error: insertError.message };
+  }
+
+  // Trigger Notification Scheduling asynchronously
+  if (inserted?.id) {
+    try {
+      const { scheduleBookingNotifications } = await import("@/lib/email/scheduler");
+      await scheduleBookingNotifications(inserted.id);
+    } catch (schedErr) {
+      console.error("Failed to schedule notifications for admin-created appointment:", schedErr);
+    }
+  }
+
+  revalidatePath("/admin/appointments");
+  revalidatePath("/admin");
+  return { success: true };
+
+}
+
+export async function updateAppointmentStatusAction(
+  id: string,
+  status: AppointmentStatus
+) {
+  const context = await getAdminContext();
+  if (!context) {
+    return { error: "Unauthorized." };
+  }
+
+  const business = context.business;
+  const supabase = await createClient();
+
+  // If staff, verify target appointment belongs to staff barber
+  if (context.role === "staff") {
+    const { data: targetApp } = await supabase
+      .from("appointments")
+      .select("barber_id")
+      .eq("id", id)
+      .single();
+
+    if (!targetApp || targetApp.barber_id !== context.barber?.id) {
+      return { error: "Unauthorized: You can only manage your own appointments." };
+    }
+  }
+
+  const { error } = await supabase
+    .from("appointments")
+    .update({ status })
+    .eq("id", id)
+    .eq("business_id", business.id);
+
+  if (error) {
+    console.error("Failed to update status", error.message);
+    return { error: error.message };
+  }
+
+  // Trigger status-specific notification jobs
+  try {
+    const { scheduleConfirmationNotification, scheduleCancellationNotifications } = await import("@/lib/email/scheduler");
+    if (status === "confirmed") {
+      await scheduleConfirmationNotification(id);
+    } else if (status === "cancelled") {
+      await scheduleCancellationNotifications(id);
+    }
+  } catch (schedErr) {
+    console.error("Failed to trigger status change notifications:", schedErr);
+  }
+
+  revalidatePath("/admin/appointments");
+  revalidatePath("/admin");
+  return { success: true };
+}
+
+export async function rescheduleAppointmentAction(
+  id: string,
+  startDate: string,
+  startTime: string,
+  service_id?: string,
+  barber_id?: string
+) {
+  const context = await getAdminContext();
+  if (!context) {
+    return { error: "Unauthorized." };
+  }
+
+  const business = context.business;
+  const supabase = await createClient();
+
+  const { data: app, error: appErr } = await supabase
+    .from("appointments")
+    .select("*")
+    .eq("id", id)
+    .eq("business_id", business.id)
+    .single();
+
+  if (appErr || !app) {
+    return { error: "Appointment not found." };
+  }
+
+  // Preserve previous start_at timestamp for reschedule comparison
+  const previousStartAtIso = app.start_at;
+
+  // If staff, enforce target barber to be staff's own barber_id
+  if (context.role === "staff") {
+    if (app.barber_id !== context.barber?.id) {
+      return { error: "Unauthorized: You can only reschedule your own appointments." };
+    }
+    barber_id = context.barber.id;
+  }
+
+  const targetBarberId = barber_id || app.barber_id;
+  const targetServiceId = service_id || app.service_id;
+
+  const { data: service, error: svcError } = await supabase
+    .from("services")
+    .select("*")
+    .eq("id", targetServiceId)
+    .eq("business_id", business.id)
+    .single();
+
+  if (svcError || !service) {
+    return { error: "Invalid service." };
+  }
+
+  const startUtc = budapestDateTimeToUtc(startDate, startTime);
+  const endUtc = new Date(
+    startUtc.getTime() + service.duration_minutes * 60 * 1000
+  );
+
+  const startIso = startUtc.toISOString();
+  const endIso = endUtc.toISOString();
+
+  // Check working hours for target barber
+  const startParts = utcToBudapestParts(startUtc);
+  const endParts = utcToBudapestParts(endUtc);
+
+  const { data: workingHours } = await supabase
+    .from("working_hours")
+    .select("*")
+    .eq("barber_id", targetBarberId)
+    .eq("day_of_week", startParts.dayOfWeek)
+    .eq("is_active", true);
+
+  if (!workingHours || workingHours.length === 0) {
+    return { error: "Barber is not working on this day." };
+  }
+
+  const appStartMins = timeStringToMinutes(startParts.timeStr);
+  const appEndMins = timeStringToMinutes(endParts.timeStr);
+
+  const fitsInSchedule = workingHours.some((wh) => {
+    const whStartMins = timeStringToMinutes(wh.start_time);
+    const whEndMins = timeStringToMinutes(wh.end_time);
+    return appStartMins >= whStartMins && appEndMins <= whEndMins;
+  });
+
+  if (!fitsInSchedule) {
+    return { error: "Appointment duration falls outside barber working hours." };
+  }
+
+  // Overlap checks for target barber
+  const { data: appOverlaps } = await supabase
+    .from("appointments")
+    .select("id, customer_name")
+    .eq("barber_id", targetBarberId)
+    .neq("id", id)
+    .in("status", ["pending", "confirmed"])
+    .lt("start_at", endIso)
+    .gt("end_at", startIso);
+
+  if (appOverlaps && appOverlaps.length > 0) {
+    return {
+      error: `Time slot overlaps with another appointment for ${appOverlaps[0].customer_name}.`,
+    };
+  }
+
+  const { data: blockedOverlaps } = await supabase
+    .from("blocked_times")
+    .select("id, reason")
+    .eq("barber_id", targetBarberId)
+    .lt("start_at", endIso)
+    .gt("end_at", startIso);
+
+  if (blockedOverlaps && blockedOverlaps.length > 0) {
+    return { error: "Time slot conflicts with a blocked time period." };
+  }
+
+  const { error: updateErr } = await supabase
+    .from("appointments")
+    .update({
+      barber_id: targetBarberId,
+      service_id: targetServiceId,
+      start_at: startIso,
+      end_at: endIso,
+    })
+    .eq("id", id)
+    .eq("business_id", business.id);
+
+  if (updateErr) {
+    console.error("Failed to reschedule", updateErr.message);
+    if (updateErr.message.includes("appointments_no_overlap")) {
+      return { error: "This time slot is already booked for this barber." };
+    }
+    return { error: updateErr.message };
+  }
+
+  // Trigger reschedule notifications asynchronously
+  try {
+    const { scheduleRescheduleNotifications } = await import("@/lib/email/scheduler");
+    await scheduleRescheduleNotifications(id, previousStartAtIso, startIso);
+  } catch (schedErr) {
+    console.error("Failed to schedule reschedule notifications:", schedErr);
+  }
+
+  revalidatePath("/admin/appointments");
+  revalidatePath("/admin");
+  return { success: true };
+}
+
+export async function deleteAppointmentAction(id: string) {
+  const context = await getAdminContext();
+  if (!context) {
+    return { error: "Unauthorized." };
+  }
+
+  const business = context.business;
+  const supabase = await createClient();
+
+  if (context.role === "staff") {
+    const { data: targetApp } = await supabase
+      .from("appointments")
+      .select("barber_id")
+      .eq("id", id)
+      .single();
+
+    if (!targetApp || targetApp.barber_id !== context.barber?.id) {
+      return { error: "Unauthorized: You can only delete your own appointments." };
+    }
+  }
+
+  // Trigger cancellation notifications before deleting
+  try {
+    const { scheduleCancellationNotifications } = await import("@/lib/email/scheduler");
+    await scheduleCancellationNotifications(id);
+  } catch (schedErr) {
+    console.error("Failed to trigger deletion cancellation notifications:", schedErr);
+  }
+
+  const { error } = await supabase
+    .from("appointments")
+    .delete()
+    .eq("id", id)
+    .eq("business_id", business.id);
+
+  if (error) {
+    console.error("Failed to delete appointment", error.message);
+    return { error: error.message };
+  }
+
+  revalidatePath("/admin/appointments");
+  revalidatePath("/admin");
+  return { success: true };
+}
+
+
