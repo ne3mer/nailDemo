@@ -25,10 +25,10 @@ DECLARE
 BEGIN
 
   -- 0. Resolve owner ID exclusively from the explicitly designated Auth user
-  SELECT id INTO v_owner_id FROM auth.users WHERE email = 'owner@maisonrose-studio.hu' LIMIT 1;
+  SELECT id INTO v_owner_id FROM auth.users WHERE email = 'ne3mer@gmail.com' LIMIT 1;
 
   IF v_owner_id IS NULL THEN
-    RAISE EXCEPTION 'Explicitly designated owner account (owner@maisonrose-studio.hu) not found in auth.users. Create the owner user before running the seed.';
+    RAISE EXCEPTION 'Explicitly designated owner account (ne3mer@gmail.com) not found in auth.users. Create the owner user before running the seed.';
   END IF;
 
   -- Ensure profile exists for the owner
@@ -59,7 +59,7 @@ BEGIN
     'An unhurried sanctuary dedicated to Russian e-file manicures, BIAB nail strengthening, and bespoke hand-painted artistry in the heart of Budapest.',
     'Nyugodt, légies szentély a gépi orosz manikűr, a BIAB körömerősítés és az egyedi kézzel festett körömdíszítés számára Budapest szívében.',
     '+36 1 458 9200',
-    'bonjour@maisonrose-studio.hu',
+    'ne3mer@gmail.com',
     'Andrássy út 28, District VI, Budapest',
     '',
     NOW(),
