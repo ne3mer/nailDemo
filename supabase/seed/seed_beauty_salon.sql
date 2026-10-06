@@ -24,14 +24,11 @@ DECLARE
   v_svc_japanese UUID  := 'f6666666-6666-4666-b666-666666666666';
 BEGIN
 
-  -- 0. Resolve owner ID from existing Auth user
+  -- 0. Resolve owner ID exclusively from the explicitly designated Auth user
   SELECT id INTO v_owner_id FROM auth.users WHERE email = 'owner@maisonrose-studio.hu' LIMIT 1;
-  IF v_owner_id IS NULL THEN
-    SELECT id INTO v_owner_id FROM auth.users ORDER BY created_at ASC LIMIT 1;
-  END IF;
 
   IF v_owner_id IS NULL THEN
-    RAISE EXCEPTION 'No Auth user found in auth.users. Please create an owner via Supabase Auth Admin API or Dashboard.';
+    RAISE EXCEPTION 'Explicitly designated owner account (owner@maisonrose-studio.hu) not found in auth.users. Create the owner user before running the seed.';
   END IF;
 
   -- Ensure profile exists for the owner
